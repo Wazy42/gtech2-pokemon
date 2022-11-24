@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "Player.hpp"
 
 Player::Player(const sf::Texture& texture) :
 	AnimatedSpriteEntity(texture, PLAYER_ANIM_POS)

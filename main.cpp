@@ -1,10 +1,13 @@
 #include <SFML/Graphics.hpp>
-#include "Game.h"
+#include "Game.hpp"
 #include "Const.h"
-#include "Player.h"
-#include "AnimatedSpriteEntity.h"
-#include "SpriteEntity.h"
+#include "Player.hpp"
+#include "AnimatedSpriteEntity.hpp"
+#include "SpriteEntity.hpp"
 #include <iostream>
+
+#include "Pokemon.hpp"
+#include "Ability.hpp"
 
 
 

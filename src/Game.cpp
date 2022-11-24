@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "Game.hpp"
 
 Game::Game() : gameWindow(sf::VideoMode(1600, 800), "Pokemon Dazzled") {
 	this->gameWindow.setFramerateLimit(FPS_LIMIT);

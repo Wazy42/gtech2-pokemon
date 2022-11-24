@@ -1,4 +1,4 @@
-#include "Combat.h"
+#include "Combat.hpp"
 
 Combat::Combat(Pokemon* ally, Pokemon* enemy)
 {

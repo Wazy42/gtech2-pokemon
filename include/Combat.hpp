@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Pokemon.h"
-#include "Ability.h"
+#include "Pokemon.hpp"
 #include <vector>
 
 class Combat

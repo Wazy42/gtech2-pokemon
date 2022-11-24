@@ -1,4 +1,4 @@
-#include "AnimatedSpriteEntity.h"
+#include "AnimatedSpriteEntity.hpp"
 
 AnimatedSpriteEntity::AnimatedSpriteEntity(const sf::Texture& texture, std::vector<sf::IntRect> animationPos) : Entity(texture)
 {

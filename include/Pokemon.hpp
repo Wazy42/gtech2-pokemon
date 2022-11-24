@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Types.hpp"
-#include "Ability.h"
 #include <string>
 #include <array>
-#include <functional>
 #include <iostream>
+#include <vector>
+
+// Forward declaration (because Ability and Pokemon are dependent on each other)
+class Ability;
 
 class Pokemon
 {
@@ -28,9 +30,10 @@ public:
 	void setDef(int v) { this->def = v; };
 	void setSpd(int v) { this->spd = v; };
 	void revive();
-	// ABILITIES
-	void learn(Ability a, int position);
-	void use(int aNum);
+	// ABILITIES (declared in "Abiliy.cpp" file)
+	std::array<Ability*, 4> getAbilities();
+	void learn(Ability* a, int position);
+	void use(int aNum, std::vector<Pokemon> targets);
 
 private:
 	std::string name;
@@ -40,4 +43,3 @@ private:
 	std::array<Ability*, 4> abilities;
 	bool alive;
 };
-

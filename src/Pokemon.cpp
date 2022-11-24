@@ -1,5 +1,6 @@
-#include "Pokemon.h"
+#include "Pokemon.hpp"
 
+// Add HPs, can not exceed the maximum of HP
 void Pokemon::addHp(int v)
 {
 	std::cout << this->name << " gained " << v << " HP." << std::endl;
@@ -8,6 +9,7 @@ void Pokemon::addHp(int v)
 		this->hp = this->maxHp;
 }
 
+// Remove HPs, may cause the death of the Pokemon
 void Pokemon::remHp(int v)
 {
 	std::cout << this->name << " lost " << v << " HP." << std::endl;
@@ -19,21 +21,12 @@ void Pokemon::remHp(int v)
 	}
 }
 
+
+// Bring back the Pokemon to life, and set it's HP to full
 void Pokemon::revive()
 {
 	this->alive = true;
 	this->hp = this->maxHp;
 }
 
-// Learn a new ability
-void Pokemon::learn(Ability a, int position)
-{
-	std::cout << this->name << " learned " << a.getName() << "." << std::endl;
-}
-
-// Use an ability
-void Pokemon::use(int aNum)
-{
-	Ability* a = this->abilities[aNum];
-	std::cout << this->name << " used " << (*a).getName() << "." << std::endl;
-}
+// Note: The definition of methods that need Ability are in the file "Ability.cpp"

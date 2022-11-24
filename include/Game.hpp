@@ -2,8 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 #include "Const.h"
-#include "SpriteEntity.h"
-#include "Player.h"
+#include "SpriteEntity.hpp"
+#include "Player.hpp"
 
 
 class Game

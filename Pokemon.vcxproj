@@ -19,26 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Ability.cpp" />
-    <ClCompile Include="AnimatedSpriteEntity.cpp" />
-    <ClCompile Include="Combat.cpp" />
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Pokemon.cpp" />
-    <ClCompile Include="SpriteEntity.cpp" />
-    <ClCompile Include="Types.cpp" />
+    <ClCompile Include="src\Ability.cpp" />
+    <ClCompile Include="src\AnimatedSpriteEntity.cpp" />
+    <ClCompile Include="src\Combat.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Pokemon.cpp" />
+    <ClCompile Include="src\SpriteEntity.cpp" />
+    <ClCompile Include="src\Types.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ability.h" />
-    <ClInclude Include="AnimatedSpriteEntity.h" />
-    <ClInclude Include="Combat.h" />
-    <ClInclude Include="Const.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Pokemon.h" />
-    <ClInclude Include="SpriteEntity.h" />
-    <ClInclude Include="Types.hpp" />
+    <ClInclude Include="include\Ability.hpp" />
+    <ClInclude Include="include\AnimatedSpriteEntity.hpp" />
+    <ClInclude Include="include\Combat.hpp" />
+    <ClInclude Include="include\Const.h" />
+    <ClInclude Include="include\Game.hpp" />
+    <ClInclude Include="include\Player.hpp" />
+    <ClInclude Include="include\Pokemon.hpp" />
+    <ClInclude Include="include\SpriteEntity.hpp" />
+    <ClInclude Include="include\Types.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -126,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\vclib\SFML-2.5.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\heylu\Documents\Gaming Campus\Year 2\Projet 5 - Pokemon\include;C:\vclib\SFML-2.5.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

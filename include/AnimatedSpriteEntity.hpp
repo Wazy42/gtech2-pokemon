@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "SpriteEntity.h"
+#include "SpriteEntity.hpp"
 
 class AnimatedSpriteEntity : public Entity
 {
