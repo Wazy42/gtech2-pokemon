@@ -1,6 +1,6 @@
-#include "Game.hpp"
+#include "../include/Game.hpp"
 
-Game::Game() : gameWindow(sf::VideoMode(1600, 800), "Pokemon Dazzled") {
+Game::Game() : gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled") {
 	this->gameWindow.setFramerateLimit(FPS_LIMIT);
 }
 
@@ -14,27 +14,48 @@ void Game::handleEvents(Player* p)
 	sf::Event event;
 	while (this->gameWindow.pollEvent(event))
 	{
-		if (event.type == sf::Event::Closed)
+		switch (event.type)
 		{
+		case sf::Event::Closed:
 			this->gameWindow.close();
+			break;
+		case sf::Event::KeyPressed:
+			switch (event.key.code)
+			{
+			case sf::Keyboard::D:
+				printf("D");
+				if (p->isMoving())
+					break;
+				p->setMoving(true);
+				p->faceRight();
+				break;
 
+			case sf::Keyboard::Q:
+				printf("Q");
+				if (p->isMoving())
+					break;
+				p->setMoving(true);
+				p->faceLeft();
+				break;
+
+			case sf::Keyboard::Z:
+				printf("Z");
+				if (p->isMoving())
+					break;
+				p->setMoving(true);
+				p->faceUp();
+				break;
+
+			case sf::Keyboard::S:
+				printf("S");
+				if (p->isMoving())
+					break;
+				p->setMoving(true);
+				p->faceDown();
+				break;
+			}
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		{
-			(*p).moveLeft();
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			(*p).moveRight();
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-		{
-			(*p).moveUp();
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		{
-			(*p).moveDown();
-		}
+
 	}
 }
 
@@ -52,4 +73,9 @@ void Game::display()
 void Game::drawSpriteEntity(const Entity& spriteEntity)
 {
 	this->gameWindow.draw(spriteEntity.getSprite());
+}
+
+void Game::drawButton(const Button& button)
+{
+	this->gameWindow.draw(button.getSprite());
 }

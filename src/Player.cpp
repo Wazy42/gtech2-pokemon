@@ -1,39 +1,51 @@
-#include "Player.hpp"
+#include "../include/Player.hpp"
 
 Player::Player(const sf::Texture& texture) :
-	AnimatedSpriteEntity(texture, PLAYER_ANIM_POS)
+	AnimatedSpriteEntity(texture, PLAYER_ANIM_SPRITE_DOWN)
 {
 	this->spriteEntity.setScale(2, 2);
-	this->nextAnimationSprite();
+	this->nextFrameSprite();
+	speed = 0.25;
 }
 
-void Player::setCoords(int x, int y)
+void Player::setCoords(float x, float y)
 {
 	x = 0;
 	y = 0;
 	this->setSpritePosition(x * SPRITE_SIZE, y * SPRITE_SIZE);
 }
 
-void Player::moveRight()
+void Player::faceRight()
 {
-	x += 1;
-	this->moveSprite(1 * SPRITE_SIZE, 0);
+	this->dir = Direction::Right;
+	this->animationSprite = PLAYER_ANIM_SPRITE_RIGHT;
 }
 
-void Player::moveLeft()
+void Player::faceLeft()
 {
-	x -= 1;
-	this->moveSprite(-1 * SPRITE_SIZE, 0);
+	this->dir = Direction::Left;
+	this->animationSprite = PLAYER_ANIM_SPRITE_LEFT;
 }
 
-void Player::moveUp()
+void Player::faceUp()
 {
-	y -= 1;
-	this->moveSprite(0, -1 * SPRITE_SIZE);
+	this->dir = Direction::Up;
+	this->animationSprite = PLAYER_ANIM_SPRITE_UP;
 }
 
-void Player::moveDown()
+void Player::faceDown()
 {
-	y += 2;
-	this->moveSprite(0, 1 * SPRITE_SIZE);
+	this->dir = Direction::Down;
+	this->animationSprite = PLAYER_ANIM_SPRITE_DOWN;
+}
+
+void Player::run()
+{
+	if (actualAnim + 1 >= this->animationSprite.size())
+	{
+		this->moving = false;
+		this->setActualFrame(0);
+	}
+		
+	this->runSprite();
 }

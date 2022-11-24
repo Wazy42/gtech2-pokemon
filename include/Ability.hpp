@@ -5,7 +5,7 @@
 #include <vector>
 
 // Base abstract class
-class Ability
+class Ability 
 {
 public:
 	// GET METHODS

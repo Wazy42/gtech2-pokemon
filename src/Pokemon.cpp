@@ -1,4 +1,4 @@
-#include "Pokemon.hpp"
+#include "../include/Pokemon.hpp"
 
 // Add HPs, can not exceed the maximum of HP
 void Pokemon::addHp(int v)

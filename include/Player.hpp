@@ -9,13 +9,18 @@ class Player : public AnimatedSpriteEntity
 {
 public:
 	Player(const sf::Texture& texture);
-	void setCoords(int x, int y);
-	void moveRight();
-	void moveLeft();
-	void moveUp();
-	void moveDown();
+	void setCoords(float x, float y);
+	void faceRight();
+	void faceLeft();
+	void faceUp();
+	void faceDown();
+	bool isMoving() { return moving; }
+	void setMoving(bool m) { moving = m; }
+	void run();
 
 private:
-	int x, y;
+	float x, y;
+	int speed;
+	bool moving = false;
 };
 

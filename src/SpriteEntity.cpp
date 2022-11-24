@@ -1,4 +1,4 @@
-#include "SpriteEntity.hpp"
+#include "../include/SpriteEntity.hpp"
 
 Entity::Entity(const sf::Texture& texture) : spriteEntity(texture), textureEntity(texture)
 {
