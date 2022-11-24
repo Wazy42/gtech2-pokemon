@@ -19,18 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ability.cpp" />
     <ClCompile Include="AnimatedSpriteEntity.cpp" />
+    <ClCompile Include="Combat.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Pokemon.cpp" />
     <ClCompile Include="SpriteEntity.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Types.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ability.h" />
     <ClInclude Include="AnimatedSpriteEntity.h" />
+    <ClInclude Include="Combat.h" />
     <ClInclude Include="Const.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="SpriteEntity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Pokemon.h" />
+    <ClInclude Include="SpriteEntity.h" />
+    <ClInclude Include="Types.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
