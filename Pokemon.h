@@ -1,5 +1,12 @@
 #pragma once
 
+#include "Types.hpp"
+#include "Ability.h"
+#include <string>
+#include <array>
+#include <functional>
+#include <iostream>
+
 class Pokemon
 {
 public:
@@ -20,6 +27,7 @@ public:
 	void setMaxHp(int v) { this->maxHp = v; };
 	void setDef(int v) { this->def = v; };
 	void setSpd(int v) { this->spd = v; };
+	void revive();
 	// ABILITIES
 	void learn(Ability a, int position);
 	void use(int aNum);
@@ -30,5 +38,6 @@ private:
 	int level;
 	int hp, maxHp, atk, def, spd;
 	std::array<Ability*, 4> abilities;
+	bool alive;
 };
 

@@ -1,8 +1,12 @@
-#include <string>
-#include <vector>
-#include "Types.hpp"
-#include "Pokemon.h"
 #include "Ability.h"
+
+void Ability::resolve(Pokemon caster, std::vector<Pokemon> targets)
+{
+	for (Pokemon target : targets)
+	{
+		this->resolve(caster, target);
+	}
+}
 
 void Attack::resolve(Pokemon caster, Pokemon target)
 {
@@ -21,23 +25,7 @@ void Attack::resolve(Pokemon caster, Pokemon target)
 	target.remHp(finalDamages);
 }
 
-void Attack::resolve(Pokemon caster, std::vector<Pokemon> targets)
-{
-	for (Pokemon target : targets)
-	{
-		this->resolve(caster, target);
-	}
-}
-
 void Effect::resolve(Pokemon caster, Pokemon target)
 {
 	// TODO: effects
-}
-
-void Effect::resolve(Pokemon caster, std::vector<Pokemon> targets)
-{
-	for (Pokemon target : targets)
-	{
-		this->resolve(caster, target);
-	}
 }

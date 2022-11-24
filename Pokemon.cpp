@@ -1,10 +1,4 @@
-#include <string>
-#include <array>
-#include <functional>
-#include "Types.hpp"
-#include "Ability.h"
 #include "Pokemon.h"
-#include <iostream>
 
 void Pokemon::addHp(int v)
 {
@@ -12,6 +6,23 @@ void Pokemon::addHp(int v)
 	this->hp += v;
 	if (this->hp > this->maxHp)
 		this->hp = this->maxHp;
+}
+
+void Pokemon::remHp(int v)
+{
+	std::cout << this->name << " lost " << v << " HP." << std::endl;
+	this->hp -= v;
+	if (this->hp <= 0)
+	{
+		this->hp = 0;
+		this->alive = false;
+	}
+}
+
+void Pokemon::revive()
+{
+	this->alive = true;
+	this->hp = this->maxHp;
 }
 
 // Learn a new ability
