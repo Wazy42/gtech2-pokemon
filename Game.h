@@ -1,18 +1,18 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
+#include "Const.h"
 #include "SpriteEntity.h"
+#include "Player.h"
 
 
-class Window
+class Game
 {
 public:
-	Window();
+	Game();
 	bool isRunning() const;
-	void handleEvents();
-	void update();
+	void handleEvents(Player* p);
 	void clear();
-	void render();
 	void display();
 	void drawSpriteEntity(const Entity &);
 	

@@ -1,3 +1,7 @@
+#pragma once
+
+#include <vector>
+#include <SFML/Graphics.hpp>
 #include "SpriteEntity.h"
 
 class AnimatedSpriteEntity : public Entity
@@ -7,7 +11,7 @@ protected:
 	std::vector<sf::IntRect> animationPos;
 	
 public:
-	AnimatedSpriteEntity(const sf::Texture&, std::vector < sf::IntRect>);
+	AnimatedSpriteEntity(const sf::Texture&, std::vector <sf::IntRect>);
 	void nextAnimationSprite();
 };
 

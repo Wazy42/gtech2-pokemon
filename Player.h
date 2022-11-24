@@ -1,12 +1,21 @@
-#include "AnimatedSpriteEntity.h"
+#pragma once
 
-class Louis : public AnimatedSpriteEntity
+#include "AnimatedSpriteEntity.h"
+#include <SFML/Graphics.hpp>
+#include "Const.h"
+
+
+class Player : public AnimatedSpriteEntity
 {
 public:
-	Louis(const sf::Texture& texture);
+	Player(const sf::Texture& texture);
+	void setCoords(int x, int y);
+	void moveRight();
+	void moveLeft();
+	void moveUp();
+	void moveDown();
+
 private:
-	int speed = 5;
-	int pos;
-	int velocity = 0;
+	int x, y;
 };
 

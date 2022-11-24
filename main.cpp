@@ -1,31 +1,38 @@
-#include "Window.h"
+#include <SFML/Graphics.hpp>
+#include "Game.h"
+#include "Const.h"
 #include "Player.h"
+#include "AnimatedSpriteEntity.h"
+#include "SpriteEntity.h"
 #include <iostream>
+
+
 
 int main()
 {
-    Window w;
-	
+    Game g;
+
     sf::Texture texture;
-    if (!texture.loadFromFile("assets/char1_walk.png"))
+    if (!texture.loadFromFile(PLAYER_TEXTURE_PATH))
     {
 		std::cout << "Error loading texture" << std::endl;
     }
 	
-    Louis louis = Louis(texture);
+	Player louis = Player(texture);
 
 	int posSprite = 0;
-	while (w.isRunning())
+	while (g.isRunning())
 	{
-		w.clear();
-		if (posSprite % 20 == 0)
+		g.clear();
+		g.handleEvents(&louis);
+		if (posSprite == 10)
 		{
 			louis.nextAnimationSprite();
 			posSprite = 0;
 		}
 		posSprite++;
-		w.drawSpriteEntity(louis);
-		w.display();
+		g.drawSpriteEntity(louis);
+		g.display();
 	}
     return 0;
 }
