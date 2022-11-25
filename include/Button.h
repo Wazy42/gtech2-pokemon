@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SpriteEntity.hpp"
+#include "Entity.hpp"
 
 class Button : public Entity
 {

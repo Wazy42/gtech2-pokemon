@@ -21,25 +21,25 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Ability.cpp" />
-    <ClCompile Include="src\AnimatedSpriteEntity.cpp" />
+    <ClCompile Include="src\AnimatedEntity.cpp" />
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Combat.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Pokemon.cpp" />
-    <ClCompile Include="src\SpriteEntity.cpp" />
+    <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\Types.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Ability.hpp" />
-    <ClInclude Include="include\AnimatedSpriteEntity.hpp" />
+    <ClInclude Include="include\AnimatedEntity.hpp" />
     <ClInclude Include="include\Button.h" />
     <ClInclude Include="include\Combat.hpp" />
     <ClInclude Include="include\Const.h" />
     <ClInclude Include="include\Game.hpp" />
     <ClInclude Include="include\Player.hpp" />
     <ClInclude Include="include\Pokemon.hpp" />
-    <ClInclude Include="include\SpriteEntity.hpp" />
+    <ClInclude Include="include\Entity.hpp" />
     <ClInclude Include="include\Types.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -128,7 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\heylu\Documents\Gaming Campus\Year 2\Projet 5 - Pokemon\include;C:\vclib\SFML-2.5.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\vclib\SFML-2.5.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

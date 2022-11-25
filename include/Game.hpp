@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Const.h"
-#include "SpriteEntity.hpp"
+#include "Entity.hpp"
 #include "Button.h"
 #include "Player.hpp"
 
@@ -12,12 +12,14 @@ class Game
 public:
 	Game();
 	bool isRunning() const;
-	void handleEvents(Player* p);
+	void handleEvents();
 	void clear();
 	void display();
-	void drawSpriteEntity(Entity &);
+	
+	void draw(sf::Drawable& drawable) { this->gameWindow.draw(drawable); }
+	void drawEntity(Entity &);
 	void drawButton(Button &);
-	void drawTest();
+	void drawMap(sf::Vector2i playerPosition);
 	
 	void openMenu() { this->menuOpen = true; }
 	void closeMenu() { this->menuOpen = false; }

@@ -2,10 +2,11 @@
 
 #include "Pokemon.hpp"
 #include "Types.hpp"
+#include "Entity.hpp"
 #include <vector>
 
 // Base abstract class
-class Ability 
+class Ability : public Entity
 {
 public:
 	// GET METHODS

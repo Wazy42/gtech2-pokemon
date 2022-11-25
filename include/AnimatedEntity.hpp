@@ -2,18 +2,18 @@
 
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "SpriteEntity.hpp"
+#include "Entity.hpp"
 
-class AnimatedSpriteEntity : public Entity
+class AnimatedEntity : public Entity
 {
 protected:
-	size_t actualAnim;
+	size_t actualFrame;
 	std::vector<sf::IntRect> animationSprite;
-	int intervalAnim = 4;
+	int intervalBFrames = 4;
 	int frameCounter = 0;
 	
 public:
-	AnimatedSpriteEntity(const sf::Texture&, std::vector <sf::IntRect>);
+	AnimatedEntity(const sf::Texture&, std::vector <sf::IntRect>);
 	void nextFrameSprite();
 	void runSprite();
 	void setActualFrame(int);
