@@ -1,4 +1,4 @@
-#include "Types.hpp"
+#include "../include/Types.hpp"
 
 // Returns the multiplier applied to the damage of an attack
 float getMultiplier(Type attacker, Type defender)

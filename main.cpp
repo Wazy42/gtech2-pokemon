@@ -1,20 +1,19 @@
 #include <SFML/Graphics.hpp>
-#include "Game.hpp"
-#include "Const.h"
-#include "Player.hpp"
-#include "AnimatedSpriteEntity.hpp"
-#include "SpriteEntity.hpp"
+#include "include/Game.hpp"
+#include "include/Button.h"
+#include "include/Const.h"
+#include "include/Player.hpp"
+#include "include/AnimatedSpriteEntity.hpp"
+#include "include/SpriteEntity.hpp"
 #include <iostream>
-
-#include "Pokemon.hpp"
-#include "Ability.hpp"
-
+#include "include/Pokemon.hpp"
+#include "include/Ability.hpp"
 
 
 int main()
 {
     Game g;
-
+	
     sf::Texture texture;
     if (!texture.loadFromFile(PLAYER_TEXTURE_PATH))
     {
@@ -23,17 +22,13 @@ int main()
 	
 	Player louis = Player(texture);
 
-	int posSprite = 0;
 	while (g.isRunning())
 	{
 		g.clear();
 		g.handleEvents(&louis);
-		if (posSprite == 10)
-		{
-			louis.nextAnimationSprite();
-			posSprite = 0;
-		}
-		posSprite++;
+		if (louis.isMoving())
+			louis.run();
+		g.drawTest();
 		g.drawSpriteEntity(louis);
 		g.display();
 	}

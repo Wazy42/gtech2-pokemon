@@ -1,6 +1,6 @@
-#include "Game.hpp"
+#include "../include/Game.hpp"
 
-Game::Game() : gameWindow(sf::VideoMode(1600, 800), "Pokemon Dazzled") {
+Game::Game() : gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled") {
 	this->gameWindow.setFramerateLimit(FPS_LIMIT);
 }
 
@@ -14,27 +14,16 @@ void Game::handleEvents(Player* p)
 	sf::Event event;
 	while (this->gameWindow.pollEvent(event))
 	{
-		if (event.type == sf::Event::Closed)
+		switch (event.type)
 		{
+		case sf::Event::Closed:
 			this->gameWindow.close();
+			break;
+		case sf::Event::KeyPressed:
+			if (this->inGame)
+				p->handleKeyPressed(event);
+		}
 
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
-		{
-			(*p).moveLeft();
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			(*p).moveRight();
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-		{
-			(*p).moveUp();
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		{
-			(*p).moveDown();
-		}
 	}
 }
 
@@ -49,7 +38,30 @@ void Game::display()
 	this->gameWindow.display();
 }
 
-void Game::drawSpriteEntity(const Entity& spriteEntity)
+void Game::drawSpriteEntity(Entity& spriteEntity)
 {
 	this->gameWindow.draw(spriteEntity.getSprite());
+}
+
+void Game::drawButton(Button& button)
+{
+	this->gameWindow.draw(button.getSprite());
+}
+
+void Game::drawTest()
+{
+	sf::RectangleShape rectangle(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+	//draw a grid 32x32 pixels with alternance yellow and blue
+	for (int i = 0; i < TILE_SIZE; i++)
+	{
+		for (int j = 0; j < TILE_SIZE; j++)
+		{
+			if ((i + j) % 2 == 0)
+				rectangle.setFillColor(sf::Color::White);
+			else
+				rectangle.setFillColor(sf::Color::Black);
+			rectangle.setPosition((float)i * TILE_SIZE, (float)j * TILE_SIZE);
+			this->gameWindow.draw(rectangle);
+		}
+	}
 }

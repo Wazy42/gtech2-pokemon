@@ -1,4 +1,4 @@
-#include "SpriteEntity.hpp"
+#include "../include/SpriteEntity.hpp"
 
 Entity::Entity(const sf::Texture& texture) : spriteEntity(texture), textureEntity(texture)
 {
@@ -16,9 +16,5 @@ void Entity::moveSprite(int x, int y)
 
 sf::Sprite& Entity::getSprite()
 {
-	return this->spriteEntity;
-}
-
-const sf::Sprite& Entity::getSprite() const {
 	return this->spriteEntity;
 }

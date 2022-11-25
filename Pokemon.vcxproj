@@ -22,6 +22,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Ability.cpp" />
     <ClCompile Include="src\AnimatedSpriteEntity.cpp" />
+    <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Combat.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -32,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="include\Ability.hpp" />
     <ClInclude Include="include\AnimatedSpriteEntity.hpp" />
+    <ClInclude Include="include\Button.h" />
     <ClInclude Include="include\Combat.hpp" />
     <ClInclude Include="include\Const.h" />
     <ClInclude Include="include\Game.hpp" />

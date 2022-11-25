@@ -1,4 +1,4 @@
-#include "Ability.hpp"
+#include "../include/Ability.hpp"
 
 // Resolve an attack cast by a Pokemon to deal damage to another
 void Attack::resolve(Pokemon* caster, Pokemon* target)
@@ -14,7 +14,7 @@ void Attack::resolve(Pokemon* caster, Pokemon* target)
 	);
 
 	// TODO: Add animations and damage dealt on screen
-
+	
 	(*target).remHp((int)finalDamages);
 }
 
