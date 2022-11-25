@@ -33,7 +33,7 @@
   <ItemGroup>
     <ClInclude Include="include\Ability.hpp" />
     <ClInclude Include="include\AnimatedEntity.hpp" />
-    <ClInclude Include="include\Button.h" />
+    <ClInclude Include="include\Button.hpp" />
     <ClInclude Include="include\Combat.hpp" />
     <ClInclude Include="include\Const.h" />
     <ClInclude Include="include\Game.hpp" />

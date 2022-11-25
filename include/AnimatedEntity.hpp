@@ -6,16 +6,18 @@
 
 class AnimatedEntity : public Entity
 {
-protected:
-	size_t actualFrame;
-	std::vector<sf::IntRect> animationSprite;
-	int intervalBFrames = 4;
-	int frameCounter = 0;
-	
 public:
-	AnimatedEntity(const sf::Texture&, std::vector <sf::IntRect>);
-	void nextFrameSprite();
-	void runSprite();
-	void setActualFrame(int);
+	AnimatedEntity(const sf::Texture& texture, std::vector<sf::IntRect> framesCoords);
+	
+	void setFramesCoords(std::vector<sf::IntRect> framesCoords);
+
+	// Frame management
+	void gotoNextFrame();
+	void setCurrentFrame(size_t frame);
+	size_t getCurrentFrame() const;
+	
+protected:
+	std::vector<sf::IntRect> framesCoords;
+	size_t currentFrame;
 };
 

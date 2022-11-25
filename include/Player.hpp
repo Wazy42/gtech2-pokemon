@@ -6,27 +6,35 @@
 #include <array>
 #include "Const.h"
 
+enum Direction
+{
+	South,
+	North,
+	East,
+	West
+};
+
 class Player : public AnimatedEntity
 {
 public:
 	Player(const sf::Texture& texture);
-	void faceRight();
-	void faceLeft();
-	void faceUp();
-	void faceDown();
 	
-	void move(sf::Vector2i);
-	sf::Vector2i getPos() { return sf::Vector2i(this->posX, this->posY); }
-	void setMoving(bool m) { moving = m; }
-	bool isMoving() { return moving; }
-	void run();
+	// Player position
+	void moveOnMap(int x, int y);
+	void moveOnMap(sf::Vector2f);
+	void setPosition(sf::Vector2f);
+	sf::Vector2f getPosition() const;
+	bool isOnATile() const;
 	
-	void handleEvents();
-
+	// Player direction and movement
+	void setFacing(Direction dir, bool moove = false);
+	Direction getFacing() const;
+	void stopMoving();
+	bool isMoving() const;
+	
 private:
-	std::array<Pokemon*, 4> team;
-	int posX, posY;
+	sf::Vector2f position; // Position in the map
+	Direction direction; // Direction the player is facing
 	bool moving = false;
-	sf::Keyboard::Key buffer = sf::Keyboard::Unknown;
 };
 

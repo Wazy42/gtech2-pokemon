@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include "include/Game.hpp"
-#include "include/Button.h"
 #include "include/Const.h"
 #include "include/Player.hpp"
 #include "include/AnimatedEntity.hpp"
@@ -12,30 +11,25 @@
 
 int main()
 {
-    Game g;
-	
     sf::Texture texture;
     if (!texture.loadFromFile(PLAYER_TEXTURE_PATH))
     {
 		std::cout << "Error loading texture" << std::endl;
     }
 	
-	// Our player
 	Player louis = Player(texture);
+	
+	Game g(louis);
+	g.switchToInGame();
 
 	while (g.isRunning())
 	{
 		g.clear();
 		g.handleEvents();
-		if (g.isInGame())
+		if (g.getGameState() == GameState::InGame)
 		{
-			louis.handleEvents();
-			g.drawMap(louis.getPos());
-			g.drawEntity(louis);
-		}
-		else if (g.isInBattle())
-		{
-			
+			g.drawMap();
+			g.managePlayer();
 		}
 		g.display();
 	}

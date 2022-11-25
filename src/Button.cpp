@@ -1,10 +1,5 @@
-#include "../include/Button.h"
+#include "../include/Button.hpp"
 
 Button::Button(const sf::Texture& texture) : Entity(texture)
 {
-}
-
-void Button::setButtonPosition(int x, int y)
-{
-	this->setButtonPosition(x, y);
 }

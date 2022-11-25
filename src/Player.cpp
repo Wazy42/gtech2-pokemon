@@ -1,99 +1,61 @@
 #include "../include/Player.hpp"
 
-Player::Player(const sf::Texture& texture) :
-	AnimatedEntity(texture, PLAYER_ANIM_SPRITE_DOWN)
+Player::Player(const sf::Texture& texture) : AnimatedEntity(texture, PLAYER_ANIM_COORDS(South))
 {
-	this->setSpritePosition((WINDOW_WIDTH - PLAYER_SPRITE_SIZE * PLAYER_SIZE_SCALE) / 2, (WINDOW_HEIGHT - PLAYER_SPRITE_SIZE * PLAYER_SIZE_SCALE) / 2);
-	this->sprite.setScale(PLAYER_SIZE_SCALE, PLAYER_SIZE_SCALE);
-	this->nextFrameSprite();
+	this->position = sf::Vector2f(0, 0);
+	this->direction = South;
+	this->moving = false;
+	this->setSpritePosition(
+		(WINDOW_WIDTH - SPRITE_SIZE * SPRITE_SCALE) / 2, 
+		(WINDOW_HEIGHT - SPRITE_SIZE * SPRITE_SCALE) / 2
+	);
+	this->sprite.setScale(SPRITE_SCALE, SPRITE_SCALE);
 }
 
-void Player::faceRight()
+void Player::moveOnMap(int x, int y)
 {
-	this->dir = Direction::Right;
-	this->animationSprite = PLAYER_ANIM_SPRITE_RIGHT;
+	this->position.x += x;
+	this->position.y += y;
 }
 
-void Player::faceLeft()
+void Player::moveOnMap(sf::Vector2f pos)
 {
-	this->dir = Direction::Left;
-	this->animationSprite = PLAYER_ANIM_SPRITE_LEFT;
+	this->position += pos;
 }
 
-void Player::faceUp()
+void Player::setPosition(sf::Vector2f pos)
 {
-	this->dir = Direction::Up;
-	this->animationSprite = PLAYER_ANIM_SPRITE_UP;
+	this->position = pos;
 }
 
-void Player::faceDown()
+sf::Vector2f Player::getPosition() const
 {
-	this->dir = Direction::Down;
-	this->animationSprite = PLAYER_ANIM_SPRITE_DOWN;
+	return this->position;
 }
 
-void Player::move(sf::Vector2i movement)
+bool Player::isOnATile() const
 {
-	this->posX += movement.x;
-	this->posY += movement.y;
+	return ((int)this->position.x % TILE_SIZE == 0 && (int)this->position.y % TILE_SIZE == 0);
 }
 
-void Player::run()
+void Player::setFacing(Direction dir, bool moove)
 {
-	// Move the player in the right direction
-	switch (this->dir)
-	{
-	case Up:
-		this->move(sf::Vector2i(0, -PLAYER_MOVEMENT_STEP));
-		break;
-	case Down:
-		this->move(sf::Vector2i(0, PLAYER_MOVEMENT_STEP));
-		break;
-	case Left:
-		this->move(sf::Vector2i(-PLAYER_MOVEMENT_STEP, 0));
-		break;
-	case Right:
-		this->move(sf::Vector2i(PLAYER_MOVEMENT_STEP, 0));
-		break;
-	}
-	
-	// If the player is in the middle of a tile, the animation is stopped
-	if (this->posX % TILE_SIZE == 0 && this->posY % TILE_SIZE == 0)
-	{
-		this->setMoving(false);
-		this->setActualFrame(0);
-	}
-	else
-	{
-		this->runSprite();
-	}		
+	this->direction = dir;
+	this->moving = moove;
+	this->setFramesCoords(PLAYER_ANIM_COORDS(dir));
 }
 
-void Player::handleEvents()
-{	
-	if (!this->moving) {
-		if (Z_PRESSED || UP_PRESSED)
-		{
-			this->faceUp();
-			this->setMoving(true);
-		}
-		else if (S_PRESSED || DOWN_PRESSED)
-		{
-			this->faceDown();
-			this->setMoving(true);
-		}
-		else if (Q_PRESSED || LEFT_PRESSED)
-		{
-			this->faceLeft();
-			this->setMoving(true);
-		}
-		else if (D_PRESSED || RIGHT_PRESSED)
-		{
-			this->faceRight();
-			this->setMoving(true);
-		}
-	}
-	else {
-		this->run();
-	}
+Direction Player::getFacing() const
+{
+	return this->direction;
+}
+
+void Player::stopMoving()
+{
+	this->moving = false;
+}
+
+bool Player::isMoving() const
+{
+	return this->moving;
 }

@@ -1,32 +1,28 @@
 #include "../include/AnimatedEntity.hpp"
 
-AnimatedEntity::AnimatedEntity(const sf::Texture& texture, std::vector<sf::IntRect> animationSprite) : Entity(texture)
+AnimatedEntity::AnimatedEntity(const sf::Texture& texture, std::vector<sf::IntRect> framesCoords) : Entity(texture), framesCoords(framesCoords)
 {
-	this->actualFrame = 0;
-	this->animationSprite = animationSprite;
-	if (animationSprite.size() <= 0)
-		throw;
+	this->setCurrentFrame(0);
 }
 
-void AnimatedEntity::nextFrameSprite()
+void AnimatedEntity::setFramesCoords(std::vector<sf::IntRect> framesCoords)
 {
-	// Sprite is set to the next frame
-	this->sprite.setTextureRect(this->animationSprite[this->actualFrame]);
-	// If the actual frame is the last one, the animation restarts
-	this->actualFrame = (this->actualFrame + 1) % this->animationSprite.size();
+	this->framesCoords = framesCoords;
 }
 
-// Called each frame
-void AnimatedEntity::runSprite()
+void AnimatedEntity::gotoNextFrame()
 {
-	// If the frame counter is equal to the interval, the sprite is set to the next frame
-	this->frameCounter = (this->frameCounter + 1) % this->intervalBFrames;
-	if (this->frameCounter == 0)
-		this->nextFrameSprite();
+	this->currentFrame = (this->currentFrame + 1) % this->framesCoords.size();
+	this->sprite.setTextureRect(this->framesCoords[this->currentFrame]);
 }
 
-void AnimatedEntity::setActualFrame(int frame)
+void AnimatedEntity::setCurrentFrame(size_t frame)
 {
-	this->actualFrame = frame;
-	this->nextFrameSprite();
+	this->currentFrame = frame;
+	this->sprite.setTextureRect(this->framesCoords[frame]);
+}
+
+size_t AnimatedEntity::getCurrentFrame() const
+{
+	return this->currentFrame;
 }
