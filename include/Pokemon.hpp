@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Types.hpp"
+#include "AnimatedEntity.hpp"
 #include <string>
 #include <array>
 #include <iostream>
@@ -9,7 +10,7 @@
 // Forward declaration (because Ability and Pokemon are dependent on each other)
 class Ability;
 
-class Pokemon
+class Pokemon : public AnimatedEntity
 {
 public:
 	// GET STATS

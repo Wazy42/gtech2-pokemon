@@ -3,8 +3,8 @@
 #include "include/Button.h"
 #include "include/Const.h"
 #include "include/Player.hpp"
-#include "include/AnimatedSpriteEntity.hpp"
-#include "include/SpriteEntity.hpp"
+#include "include/AnimatedEntity.hpp"
+#include "include/Entity.hpp"
 #include <iostream>
 #include "include/Pokemon.hpp"
 #include "include/Ability.hpp"
@@ -20,33 +20,23 @@ int main()
 		std::cout << "Error loading texture" << std::endl;
     }
 	
+	// Our player
 	Player louis = Player(texture);
 
 	while (g.isRunning())
 	{
 		g.clear();
-		g.handleEvents(&louis);
-		if (louis.isMoving())
+		g.handleEvents();
+		if (g.isInGame())
 		{
-			louis.run();
-			Direction dir = louis.getDirection();
-			switch (dir)
-			{
-			case Up:
-				louis.moveSprite(0, -PLAYER_MOVEMENT_STEP);
-				break;
-			case Down:
-				louis.moveSprite(0, PLAYER_MOVEMENT_STEP);
-				break;
-			case Left:
-				louis.moveSprite(-PLAYER_MOVEMENT_STEP, 0);
-				break;
-			case Right:
-				louis.moveSprite(PLAYER_MOVEMENT_STEP, 0);
-				break;
-			}
+			louis.handleEvents();
+			g.drawMap(louis.getPos());
+			g.drawEntity(louis);
 		}
-		g.drawSpriteEntity(louis);
+		else if (g.isInBattle())
+		{
+			
+		}
 		g.display();
 	}
     return 0;
