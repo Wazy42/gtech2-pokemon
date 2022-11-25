@@ -18,7 +18,3 @@ sf::Sprite& Entity::getSprite()
 {
 	return this->spriteEntity;
 }
-
-const sf::Sprite& Entity::getSprite() const {
-	return this->spriteEntity;
-}

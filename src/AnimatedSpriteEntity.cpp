@@ -1,34 +1,32 @@
 #include "../include/AnimatedSpriteEntity.hpp"
 
-AnimatedSpriteEntity::AnimatedSpriteEntity(const sf::Texture& texture, std::vector<sf::IntRect> animationPos) : Entity(texture)
+AnimatedSpriteEntity::AnimatedSpriteEntity(const sf::Texture& texture, std::vector<sf::IntRect> animationSprite) : Entity(texture)
 {
 	this->actualAnim = 0;
-	this->animationSprite = animationPos;
-	if (animationPos.size() <= 0)
+	this->animationSprite = animationSprite;
+	if (animationSprite.size() <= 0)
 		throw;
 }
 
 void AnimatedSpriteEntity::nextFrameSprite()
 {
+	// Sprite is set to the next frame
 	this->spriteEntity.setTextureRect(this->animationSprite[this->actualAnim]);
-	this->actualAnim++;
-
-	if (this->actualAnim >= this->animationSprite.size())
-		this->actualAnim = 0;
+	// If the actual frame is the last one, the animation restarts
+	this->actualAnim = (this->actualAnim + 1) % this->animationSprite.size();
 }
 
+// Called each frame
 void AnimatedSpriteEntity::runSprite()
 {
-	if (this->framCounter >= this->intervalAnim)
-	{
+	// If the frame counter is equal to the interval, the sprite is set to the next frame
+	this->frameCounter = (this->frameCounter + 1) % this->intervalAnim;
+	if (this->frameCounter == 0)
 		this->nextFrameSprite();
-		this->framCounter = 0;
-	}
-	else
-		this->framCounter++;
 }
 
 void AnimatedSpriteEntity::setActualFrame(int frame)
 {
 	this->actualAnim = frame;
+	this->nextFrameSprite();
 }

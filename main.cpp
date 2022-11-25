@@ -27,25 +27,8 @@ int main()
 		g.clear();
 		g.handleEvents(&louis);
 		if (louis.isMoving())
-		{
 			louis.run();
-			Direction dir = louis.getDirection();
-			switch (dir)
-			{
-			case Up:
-				louis.moveSprite(0, -PLAYER_MOVEMENT_STEP);
-				break;
-			case Down:
-				louis.moveSprite(0, PLAYER_MOVEMENT_STEP);
-				break;
-			case Left:
-				louis.moveSprite(-PLAYER_MOVEMENT_STEP, 0);
-				break;
-			case Right:
-				louis.moveSprite(PLAYER_MOVEMENT_STEP, 0);
-				break;
-			}
-		}
+		g.drawTest();
 		g.drawSpriteEntity(louis);
 		g.display();
 	}

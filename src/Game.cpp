@@ -20,40 +20,8 @@ void Game::handleEvents(Player* p)
 			this->gameWindow.close();
 			break;
 		case sf::Event::KeyPressed:
-			switch (event.key.code)
-			{
-			case sf::Keyboard::D:
-				printf("D");
-				if (p->isMoving())
-					break;
-				p->setMoving(true);
-				p->faceRight();
-				break;
-
-			case sf::Keyboard::Q:
-				printf("Q");
-				if (p->isMoving())
-					break;
-				p->setMoving(true);
-				p->faceLeft();
-				break;
-
-			case sf::Keyboard::Z:
-				printf("Z");
-				if (p->isMoving())
-					break;
-				p->setMoving(true);
-				p->faceUp();
-				break;
-
-			case sf::Keyboard::S:
-				printf("S");
-				if (p->isMoving())
-					break;
-				p->setMoving(true);
-				p->faceDown();
-				break;
-			}
+			if (this->inGame)
+				p->handleKeyPressed(event);
 		}
 
 	}
@@ -70,12 +38,30 @@ void Game::display()
 	this->gameWindow.display();
 }
 
-void Game::drawSpriteEntity(const Entity& spriteEntity)
+void Game::drawSpriteEntity(Entity& spriteEntity)
 {
 	this->gameWindow.draw(spriteEntity.getSprite());
 }
 
-void Game::drawButton(const Button& button)
+void Game::drawButton(Button& button)
 {
 	this->gameWindow.draw(button.getSprite());
+}
+
+void Game::drawTest()
+{
+	sf::RectangleShape rectangle(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+	//draw a grid 32x32 pixels with alternance yellow and blue
+	for (int i = 0; i < TILE_SIZE; i++)
+	{
+		for (int j = 0; j < TILE_SIZE; j++)
+		{
+			if ((i + j) % 2 == 0)
+				rectangle.setFillColor(sf::Color::White);
+			else
+				rectangle.setFillColor(sf::Color::Black);
+			rectangle.setPosition((float)i * TILE_SIZE, (float)j * TILE_SIZE);
+			this->gameWindow.draw(rectangle);
+		}
+	}
 }

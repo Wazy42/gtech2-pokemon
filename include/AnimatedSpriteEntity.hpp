@@ -9,8 +9,8 @@ class AnimatedSpriteEntity : public Entity
 protected:
 	size_t actualAnim;
 	std::vector<sf::IntRect> animationSprite;
-	int intervalAnim = 2;
-	int framCounter = 0;
+	int intervalAnim = 4;
+	int frameCounter = 0;
 	
 public:
 	AnimatedSpriteEntity(const sf::Texture&, std::vector <sf::IntRect>);
