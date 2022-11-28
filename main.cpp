@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+
 #include "include/Game.hpp"
 #include "include/Const.h"
 #include "include/Player.hpp"
@@ -20,6 +21,7 @@ int main()
 	Player louis = Player(texture);
 	
 	Game g(louis);
+	g.loadMap();
 
 	while (g.isRunning())
 	{

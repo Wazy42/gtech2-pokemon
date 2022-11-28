@@ -1,7 +1,9 @@
 #include "../include/Game.hpp"
 
+#include <fstream>
+
 Game::Game(Player& player) : 
-	gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled", sf::Style::Fullscreen),
+	gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled", sf::Style::Close),
 	gameState(GameState::MainMenu), 
 	player(player)
 {
@@ -89,7 +91,7 @@ void Game::handleEvents()
 void Game::managePlayer()
 {
 	// Player has to end his movement
-	if (this->player.isMoving() && this->player.isOnATile()) 
+	if (this->player.isMoving() && this->player.isOnATile())
 	{
 		this->player.stopMoving();
 	}
@@ -143,9 +145,72 @@ void Game::managePlayer()
 	}
 }
 
-/// Drawings
+void Game::loadMap()
+{
+	// Load textures
+	this->globalTexture.loadFromFile("assets/map/global.png");
+	this->natureTexture.loadFromFile("assets/map/nature.png");
+	
 
-// Draw an entity on the window
+	// Load map
+	std::string data;
+	std::string line;
+	std::fstream file;
+	//Open the file in read mode
+	file.open("data/spawn.map", std::ios::in);
+	if (file.is_open())
+	{
+		while (getline(file, line))
+			data += line;
+		file.close();
+	}
+	else
+	{
+		std::cout << "Error while opening the file" << std::endl;
+	}
+
+	// Create the map
+	std::string temp = ""; 
+	std::vector<int> row = std::vector<int>();
+	std::vector<std::vector<int>> layer = std::vector<std::vector<int>>();
+	this->spawnMap = std::vector<std::vector<std::vector<int>>>(); // reset map
+	for (int i = 0; i < data.size(); i++)
+	{
+		// new tile
+		if (data[i] == ',')
+		{
+			temp = "";
+		}
+		// new tile line
+		else if (data[i] == ';')
+		{
+			if (row != std::vector<int>())
+			{
+				layer.push_back(row);
+				row = std::vector<int>();
+			}
+		}
+		// new layer
+		else if (data[i] == '!')
+		{
+			if (layer != std::vector<std::vector<int>>())
+			{
+				this->spawnMap.push_back(layer);
+				layer = std::vector<std::vector<int>>();
+			}
+		}
+		else
+			temp += data[i];
+
+		#define PUSH_ID_ON_STR(str, id) if (temp == str) row.push_back(id)
+		
+		PUSH_ID_ON_STR("grass", 163);
+		PUSH_ID_ON_STR("spawn", 6686);
+		PUSH_ID_ON_STR("void", -1);
+	}
+
+}
+
 void Game::drawEntity(Entity& Entity)
 {
 	this->gameWindow.draw(Entity.getSprite());
@@ -181,18 +246,30 @@ void Game::drawPauseMenu()
 
 void Game::drawInGame()
 {
+	sf::Sprite sprite;
+	sprite.setTexture(this->globalTexture);
+	
 	// Draw the map
-	sf::RectangleShape rectangle(sf::Vector2f((float)TILE_SIZE, (float)TILE_SIZE));
-	for (int i = 0; i < TILE_SIZE; i++)
+	for (int layer_i = 0; layer_i > this->spawnMap.size(); layer_i++)
 	{
-		for (int j = 0; j < TILE_SIZE; j++)
+		// Draw each layer
+		std::vector<std::vector<int>> layer = this->spawnMap[layer_i];
+		for (int row_i = 0; row_i > layer.size(); row_i++)
 		{
-			if ((i + j) % 2 == 0)
-				rectangle.setFillColor(sf::Color::White);
-			else
-				rectangle.setFillColor(sf::Color::Black);
-			rectangle.setPosition(-this->player.getPositionOnMap().x - WINDOW_WIDTH / 2 + (i + 0.5) * TILE_SIZE, -this->player.getPositionOnMap().y - WINDOW_HEIGHT / 2 + j * TILE_SIZE);
-			this->gameWindow.draw(rectangle);
+			// Draw each row
+			std::vector<int> row = layer[row_i];
+			for (int tile_i = 0; tile_i > row.size(); tile_i++)
+			{
+				
+				int tileID = row[tile_i];
+				if (tileID == -1)
+					continue;
+
+				sprite.setTextureRect(MAP_SPRITE_COORDS(tileID));
+				sprite.setPosition(row_i * TILE_SIZE, layer_i * TILE_SIZE);
+				sprite.setScale(MAP_TILE_SCALE, MAP_TILE_SCALE);
+				this->gameWindow.draw(sprite);
+			}
 		}
 	}
 
