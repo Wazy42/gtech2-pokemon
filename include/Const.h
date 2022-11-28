@@ -7,9 +7,14 @@
 #define FPS_LIMIT 60
 
 #define TILE_SIZE 64
+
+// Map
+#define MAP_TILE_SIZE 16
+#define MAP_TILE_SCALE TILE_SIZE / MAP_TILE_SIZE
+
+// Player
 #define SPRITE_SIZE 32
 #define SPRITE_SCALE TILE_SIZE / SPRITE_SIZE
-
 #define PLAYER_TEXTURE_PATH "assets/char1_walk.png"
 #define PLAYER_ANIM_COORDS(dir) { sf::IntRect(0, dir * 32, 32, 32), sf::IntRect(32, dir * 32, 32, 32), sf::IntRect(64, dir * 32, 32, 32), sf::IntRect(96, dir * 32, 32, 32), sf::IntRect(128, dir * 32, 32, 32), sf::IntRect(160, dir * 32, 32, 32), sf::IntRect(192, dir * 32, 32, 32), sf::IntRect(224, dir * 32, 32, 32)}
 #define PLAYER_MOVEMENT_STEP 2
