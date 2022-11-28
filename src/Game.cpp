@@ -204,8 +204,11 @@ void Game::loadMap()
 
 		#define PUSH_ID_ON_STR(str, id) if (temp == str) row.push_back(id)
 		
-		PUSH_ID_ON_STR("grass", 163);
-		PUSH_ID_ON_STR("spawn", 6686);
+		//get id info
+		printf("%s\n", temp.c_str());
+		
+		PUSH_ID_ON_STR("grass", 15);
+		PUSH_ID_ON_STR("spawn", 3);
 		PUSH_ID_ON_STR("void", -1);
 	}
 
@@ -250,25 +253,18 @@ void Game::drawInGame()
 	sprite.setTexture(this->globalTexture);
 	
 	// Draw the map
-	for (int layer_i = 0; layer_i > this->spawnMap.size(); layer_i++)
+	for (int layer = 0; layer < this->spawnMap.size(); layer++)
 	{
-		// Draw each layer
-		std::vector<std::vector<int>> layer = this->spawnMap[layer_i];
-		for (int row_i = 0; row_i > layer.size(); row_i++)
+		for (int y = 0; y < this->spawnMap[layer].size(); y++)
 		{
-			// Draw each row
-			std::vector<int> row = layer[row_i];
-			for (int tile_i = 0; tile_i > row.size(); tile_i++)
+			for (int x = 0; x < this->spawnMap[layer][y].size(); x++)
 			{
-				
-				int tileID = row[tile_i];
-				if (tileID == -1)
-					continue;
-
-				sprite.setTextureRect(MAP_SPRITE_COORDS(tileID));
-				sprite.setPosition(row_i * TILE_SIZE, layer_i * TILE_SIZE);
-				sprite.setScale(MAP_TILE_SCALE, MAP_TILE_SCALE);
-				this->gameWindow.draw(sprite);
+				if (this->spawnMap[layer][y][x] != -1)
+				{
+					sprite.setTextureRect(sf::IntRect(this->spawnMap[layer][y][x] % 16 * 32, this->spawnMap[layer][y][x] / 16 * 32, 32, 32));
+					sprite.setPosition(x * 32, y * 32);
+					this->gameWindow.draw(sprite);
+				}
 			}
 		}
 	}
