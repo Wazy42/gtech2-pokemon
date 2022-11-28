@@ -22,8 +22,8 @@ public:
 	// Player position
 	void moveOnMap(int x, int y);
 	void moveOnMap(sf::Vector2f);
-	void setPosition(sf::Vector2f);
-	sf::Vector2f getPosition() const;
+	void setPositionOnMap(sf::Vector2f);
+	sf::Vector2f getPositionOnMap() const;
 	bool isOnATile() const;
 	
 	// Player direction and movement

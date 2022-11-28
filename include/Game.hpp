@@ -18,26 +18,43 @@ class Game
 public:
 	Game(Player& player);
 	
-	// Game
-	bool isRunning() const;
-	GameState getGameState() const;
+	// Menus
 	void switchToMainMenu();
 	void switchToPauseMenu();
 	void switchToInGame();
 	void switchToInBattle();
+
+	// Game
+	bool isRunning() const;
+	GameState getGameState() const;
 	void handleEvents();
 	void managePlayer();
 	
 	// Drawings
 	void drawEntity(Entity& Entity);
-	void drawMap();
+	void drawText(sf::Text text);
+	void drawMainMenu();
+	void drawPauseMenu();
+	void drawInGame();
+	void drawInBattle();
 	void clear();
 	void display();
+
+	// Text
+	void changeFont(std::string fontPath);
+	void changeFontSize(int size);
+	void changeFontColor(sf::Color color);
+	sf::Text createText(std::string text, int x, int y);
 	
 private:
 	sf::RenderWindow gameWindow;
 	GameState gameState;
 	Player player;
 	sf::Keyboard::Key buffer;
+
+	// Text
+	sf::Font font;
+	int fontSize;
+	sf::Color fontColor;
 };
 

@@ -20,17 +20,29 @@ int main()
 	Player louis = Player(texture);
 	
 	Game g(louis);
-	g.switchToInGame();
 
 	while (g.isRunning())
 	{
 		g.clear();
 		g.handleEvents();
-		if (g.getGameState() == GameState::InGame)
+		
+		switch (g.getGameState())
 		{
-			g.drawMap();
+		case GameState::MainMenu:
+			g.drawMainMenu();
+			break;
+		case GameState::PauseMenu:
+			g.drawPauseMenu();
+			break;
+		case GameState::InGame:
 			g.managePlayer();
+			g.drawInGame();
+			break;
+		case GameState::InBattle:
+			g.drawInBattle();
+			break;
 		}
+		
 		g.display();
 	}
     return 0;

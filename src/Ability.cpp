@@ -18,13 +18,8 @@ void Attack::resolve(Pokemon* caster, Pokemon* target)
 	(*target).remHp((int)finalDamages);
 }
 
-// Resolve an effect cast by a Pokemon to affect another's status
-void Effect::resolve(Pokemon* caster, Pokemon* target)
-{
-	// TODO: effects
-}
-
 /// Here are the definitions of Pokemon's methods that use Ability
+
 // Returns the Pokemon's ability list
 std::array<Ability*, 4> Pokemon::getAbilities()
 {

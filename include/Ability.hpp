@@ -26,11 +26,3 @@ public:
 	void resolve(Pokemon* caster, Pokemon* target);
 private:
 };
-
-class Effect : public Ability
-{
-public:
-	void resolve(Pokemon* caster, Pokemon* target);
-private:
-};
-
