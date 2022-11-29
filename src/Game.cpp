@@ -286,17 +286,18 @@ void Game::drawInGame()
 		{
 			for (int x = 0; x < this->spawnMap[layer][y].size(); x++)
 			{
-				if (this->spawnMap[layer][y][x] != -1)
+				int id = this->spawnMap[layer][y][x] - 1;
+				if (id != -1)
 				{
 					sprite.setTextureRect(sf::IntRect(
-						(this->spawnMap[layer][y][x] % 148) * MAP_TILE_SIZE,
-						(this->spawnMap[layer][y][x] / 148) * MAP_TILE_SIZE,
+						(id % 148) * MAP_TILE_SIZE,
+						(id / 148) * MAP_TILE_SIZE,
 						16,
 						16
 					));
 					sprite.setPosition(
-						(float)(-this->player.getPositionOnMap().x - WINDOW_WIDTH / 2 + (x + 0.5) * TILE_SIZE),
-						(float)(-this->player.getPositionOnMap().y - WINDOW_HEIGHT / 2 + (y - 0.25) * TILE_SIZE)
+						(float)(-this->player.getPositionOnMap().x + (x + 0.5) * TILE_SIZE),
+						(float)(-this->player.getPositionOnMap().y + y * TILE_SIZE)
 					);
 					sprite.setScale(MAP_TILE_SCALE, MAP_TILE_SCALE);
 					this->gameWindow.draw(sprite);
