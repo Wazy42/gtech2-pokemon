@@ -179,7 +179,12 @@ void Game::loadMap()
 		// new tile
 		if (data[i] == ',')
 		{
-			temp = "";
+			if (temp != "")
+			{
+				int tile = std::stoi(temp);
+				row.push_back(tile);
+				temp = "";
+			}
 		}
 		// new tile line
 		else if (data[i] == ';')
@@ -199,14 +204,10 @@ void Game::loadMap()
 				layer = std::vector<std::vector<int>>();
 			}
 		}
+
 		else
 			temp += data[i];
-
-		#define PUSH_ID_ON_STR(str, id) if (temp == str) row.push_back(id)
-		
-		PUSH_ID_ON_STR("grass", 163);
 	}
-
 }
 
 void Game::drawEntity(Entity& Entity)
@@ -256,9 +257,17 @@ void Game::drawInGame()
 			{
 				if (this->spawnMap[layer][y][x] != -1)
 				{
-					sprite.setTextureRect(MAP_SPRITE_COORDS(id));
-					sprite.setPosition(x * 16, y * 16);
-
+					sprite.setTextureRect(sf::IntRect(
+						(this->spawnMap[layer][y][x] % 148) * MAP_TILE_SIZE,
+						(this->spawnMap[layer][y][x] / 148) * MAP_TILE_SIZE,
+						16,
+						16
+					));
+					sprite.setPosition(
+						-this->player.getPositionOnMap().x - WINDOW_WIDTH / 2 + (x + 0.5) * TILE_SIZE,
+						-this->player.getPositionOnMap().y - WINDOW_HEIGHT / 2 + (y - 0.25) * TILE_SIZE
+					);
+					sprite.setScale(MAP_TILE_SCALE, MAP_TILE_SCALE);
 					this->gameWindow.draw(sprite);
 				}
 			}
