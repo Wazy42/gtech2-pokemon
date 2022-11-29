@@ -21,20 +21,19 @@ int main()
 	Player louis = Player(texture);
 	
 	Game g(louis);
+	g.switchToMainMenu();
 	g.loadMap();
 
 	while (g.isRunning())
 	{
-		g.clear();
 		g.handleEvents();
+		g.clear();
 		
 		switch (g.getGameState())
 		{
 		case GameState::MainMenu:
-			g.drawMainMenu();
-			break;
 		case GameState::PauseMenu:
-			g.drawPauseMenu();
+			g.drawMenu();
 			break;
 		case GameState::InGame:
 			g.managePlayer();

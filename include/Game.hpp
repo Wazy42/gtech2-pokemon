@@ -6,7 +6,6 @@
 #include "Player.hpp"
 
 
-
 enum GameState
 {
 	MainMenu,
@@ -36,8 +35,7 @@ public:
 	// Drawings
 	void drawEntity(Entity& Entity);
 	void drawText(sf::Text text);
-	void drawMainMenu();
-	void drawPauseMenu();
+	void drawMenu();
 	void drawInGame();
 	void drawInBattle();
 	void clear();
@@ -47,7 +45,7 @@ public:
 	void changeFont(std::string fontPath);
 	void changeFontSize(int size);
 	void changeFontColor(sf::Color color);
-	sf::Text createText(std::string text, int x, int y);
+	sf::Text createText(std::string text, sf::IntRect rect);
 	
 private:
 	// Game
@@ -65,5 +63,9 @@ private:
 	sf::Texture globalTexture;
 	sf::Texture natureTexture;
 	std::vector<std::vector<std::vector<int>>> spawnMap;
+
+	// Menus
+	std::vector<sf::Text> textsToDraw;
+	sf::Texture backgroundTexture;
 };
 
