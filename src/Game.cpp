@@ -204,12 +204,7 @@ void Game::loadMap()
 
 		#define PUSH_ID_ON_STR(str, id) if (temp == str) row.push_back(id)
 		
-		//get id info
-		printf("%s\n", temp.c_str());
-		
-		PUSH_ID_ON_STR("grass", 15);
-		PUSH_ID_ON_STR("spawn", 3);
-		PUSH_ID_ON_STR("void", -1);
+		PUSH_ID_ON_STR("grass", 163);
 	}
 
 }
@@ -261,8 +256,9 @@ void Game::drawInGame()
 			{
 				if (this->spawnMap[layer][y][x] != -1)
 				{
-					sprite.setTextureRect(sf::IntRect(this->spawnMap[layer][y][x] % 16 * 32, this->spawnMap[layer][y][x] / 16 * 32, 32, 32));
-					sprite.setPosition(x * 32, y * 32);
+					sprite.setTextureRect(MAP_SPRITE_COORDS(id));
+					sprite.setPosition(x * 16, y * 16);
+
 					this->gameWindow.draw(sprite);
 				}
 			}
