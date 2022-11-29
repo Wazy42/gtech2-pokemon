@@ -15,7 +15,7 @@ int main()
     sf::Texture texture;
     if (!texture.loadFromFile(PLAYER_TEXTURE_PATH))
     {
-		std::cout << "Error loading texture" << std::endl;
+		throw std::runtime_error("Error while loading texture");
     }
 	
 	Player louis = Player(texture);

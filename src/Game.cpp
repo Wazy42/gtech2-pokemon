@@ -139,8 +139,8 @@ void Game::managePlayer()
 			this->player.moveOnMap(PLAYER_MOVEMENT_STEP, 0);
 			break;
 		}
-
-		if ((int)(this->player.getPositionOnMap().x + this->player.getPositionOnMap().y) % 8 == 0)
+		
+		if ((int)(this->player.getPositionOnMap().x + this->player.getPositionOnMap().y) % (TILE_SIZE / PLAYER_MOVEMENT_STEP) == 0)
 			this->player.gotoNextFrame();
 	}
 }
@@ -148,9 +148,7 @@ void Game::managePlayer()
 void Game::loadMap()
 {
 	// Load textures
-	this->globalTexture.loadFromFile("assets/map/global.png");
-	this->natureTexture.loadFromFile("assets/map/nature.png");
-	
+	this->globalTexture.loadFromFile(MAP_TEXTURE_PATH);	
 
 	// Load map
 	std::string data;

@@ -17,16 +17,15 @@
 // Map
 #define MAP_TILE_SIZE 16
 #define MAP_TILE_SCALE TILE_SIZE / MAP_TILE_SIZE
-#define MAP_GLOBAL_TEXTURE_PATH "assets/map/global.png"
-#define MAP_NATURE_TEXTUTE_PATH "assets/map/nature.png"
+#define MAP_TEXTURE_PATH "assets/map/global.png"
 #define MAP_SPRITE_COORDS(id) sf::IntRect((id % 148) * MAP_TILE_SIZE, (int)(id / 148) * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE)
 #define MAP_SPAWN_PATH "data/spawn.map"
 
 // Player
-#define SPRITE_SIZE 32
+#define SPRITE_SIZE 64
 #define SPRITE_SCALE TILE_SIZE / SPRITE_SIZE
-#define PLAYER_TEXTURE_PATH "assets/player.png"
-#define PLAYER_ANIM_COORDS(dir) { sf::IntRect(0, dir * 32, 32, 32), sf::IntRect(32, dir * 32, 32, 32), sf::IntRect(64, dir * 32, 32, 32), sf::IntRect(96, dir * 32, 32, 32), sf::IntRect(128, dir * 32, 32, 32), sf::IntRect(160, dir * 32, 32, 32), sf::IntRect(192, dir * 32, 32, 32), sf::IntRect(224, dir * 32, 32, 32)}
+#define PLAYER_TEXTURE_PATH "assets/player/player.png"
+#define PLAYER_ANIM_COORDS(dir) { sf::IntRect(0, dir * 64, 64, 64), sf::IntRect(64, dir * 64, 64, 64), sf::IntRect(128, dir * 64, 64, 64), sf::IntRect(192, dir * 64, 64, 64)}
 #define PLAYER_MOVEMENT_STEP 2
 
 // Keys
