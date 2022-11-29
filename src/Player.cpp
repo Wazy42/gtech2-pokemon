@@ -6,10 +6,10 @@ Player::Player(const sf::Texture& texture) : AnimatedEntity(texture, PLAYER_ANIM
 	this->direction = South;
 	this->moving = false;
 	this->setSpritePosition(
-		(WINDOW_WIDTH - SPRITE_SIZE * SPRITE_SCALE) / 2, 
-		(WINDOW_HEIGHT - SPRITE_SIZE * SPRITE_SCALE) / 2
+		(WINDOW_WIDTH - PLAYER_SIZE * PLAYER_SCALE) / 2, 
+		(WINDOW_HEIGHT - PLAYER_SIZE * PLAYER_SCALE) / 2
 	);
-	this->sprite.setScale(SPRITE_SCALE, SPRITE_SCALE);
+	this->sprite.setScale(PLAYER_SCALE, PLAYER_SCALE);
 }
 
 // Move the player on the map by x and y (movement)

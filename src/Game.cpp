@@ -3,7 +3,7 @@
 #include <fstream>
 
 Game::Game(Player& player) : 
-	gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled", sf::Style::Close),
+	gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled", sf::Style::Fullscreen),
 	gameState(GameState::MainMenu), 
 	player(player)
 {
@@ -15,11 +15,37 @@ Game::Game(Player& player) :
 // Change game state to MainMenu
 void Game::switchToMainMenu()
 {
+	// Get the background
+	this->backgroundTexture.loadFromFile(MAIN_MENU_TEXTURE_PATH);
+	
+	// Create the text
+	this->changeFont(FONT_POKEMON_SOLID_PATH);
+	this->changeFontColor(sf::Color::Blue);
+	this->changeFontSize(FONT_SIZE_MENU);
+
+	this->textsToDraw.clear();
+	this->textsToDraw.push_back(this->createText("Play", PLAY_BUTTON_RECT));
+	this->textsToDraw.push_back(this->createText("Settings", SETTINGS_BUTTON_RECT));
+	this->textsToDraw.push_back(this->createText("Quit", QUIT_BUTTON_RECT));
+	
 	this->gameState = GameState::MainMenu;
 }
 
 void Game::switchToPauseMenu()
 {
+	// Get the background
+	this->backgroundTexture.loadFromFile(PAUSE_MENU_TEXTURE_PATH);
+	
+	// Create the text
+	this->changeFont(FONT_SPINWERAD_PATH);
+	this->changeFontColor(sf::Color::Blue);
+	this->changeFontSize(FONT_SIZE_MENU);
+
+	this->textsToDraw.clear();
+	this->textsToDraw.push_back(this->createText("Resume", RESUME_BUTTON_RECT));
+	this->textsToDraw.push_back(this->createText("Save to main menu", MAIN_MENU_BUTTON_RECT));
+	this->textsToDraw.push_back(this->createText("Save and quit", SAVE_AND_QUIT_BUTTON_RECT));
+	
 	this->gameState = GameState::PauseMenu;
 }
 
@@ -57,16 +83,20 @@ void Game::handleEvents()
 		case sf::Event::Closed:
 			this->gameWindow.close();
 			break;
+
+		// Keyboard events
 		case sf::Event::KeyPressed:
 			if (this->gameState == PauseMenu && ESC_PRESSED)
 			{
-				this->gameState = InGame;
+				this->switchToInGame();
 			}
 			else if (this->gameState == InGame && ESC_PRESSED)
 			{
-				// TODO: Pause menu
+				this->switchToPauseMenu();
 			}
 			break;
+
+		// Mouse events
 		case sf::Event::MouseButtonPressed:
 			sf::Vector2i mousePosition = sf::Mouse::getPosition(this->gameWindow);
 			if (this->gameState == MainMenu)
@@ -84,6 +114,21 @@ void Game::handleEvents()
 					this->gameWindow.close();
 				}
 			}
+			else if (this->gameState == PauseMenu)
+			{
+				if (RESUME_BUTTON_RECT.contains(mousePosition))
+				{
+					this->switchToInGame();
+				}
+				else if (MAIN_MENU_BUTTON_RECT.contains(mousePosition))
+				{
+					this->switchToMainMenu();
+				}
+				else if (SAVE_AND_QUIT_BUTTON_RECT.contains(mousePosition))
+				{
+					this->gameWindow.close();
+				}
+			}
 		}
 	}
 }
@@ -97,7 +142,7 @@ void Game::managePlayer()
 	}
 
 	// Check if player wants to move
-	if (!player.isMoving())
+	if (!player.isMoving()) 
 	{// TODO: Check collisions before moving
 		if (Z_PRESSED || UP_PRESSED)
 		{
@@ -124,24 +169,24 @@ void Game::managePlayer()
 	// Animate the walk
 	if (player.isMoving())
 	{
+		if ((int)(this->player.getPositionOnMap().x + this->player.getPositionOnMap().y) % 16 == 0)
+			this->player.gotoNextFrame();
+		
 		switch (this->player.getFacing())
 		{
 		case Direction::North:
-			this->player.moveOnMap(0, -PLAYER_MOVEMENT_STEP);
+			this->player.moveOnMap(0, -PLAYER_MOVEMENT_SPEED);
 			break;
 		case Direction::West:
-			this->player.moveOnMap(-PLAYER_MOVEMENT_STEP, 0);
+			this->player.moveOnMap(-PLAYER_MOVEMENT_SPEED, 0);
 			break;
 		case Direction::South:
-			this->player.moveOnMap(0, PLAYER_MOVEMENT_STEP);
+			this->player.moveOnMap(0, PLAYER_MOVEMENT_SPEED);
 			break;
 		case Direction::East:
-			this->player.moveOnMap(PLAYER_MOVEMENT_STEP, 0);
+			this->player.moveOnMap(PLAYER_MOVEMENT_SPEED, 0);
 			break;
 		}
-		
-		if ((int)(this->player.getPositionOnMap().x + this->player.getPositionOnMap().y) % (TILE_SIZE / PLAYER_MOVEMENT_STEP) == 0)
-			this->player.gotoNextFrame();
 	}
 }
 
@@ -164,7 +209,7 @@ void Game::loadMap()
 	}
 	else
 	{
-		std::cout << "Error while opening the file" << std::endl;
+		throw std::runtime_error("Error while opening the file");
 	}
 
 	// Create the map
@@ -219,28 +264,16 @@ void Game::drawText(sf::Text text)
 	this->gameWindow.draw(text);
 }
 
-void Game::drawMainMenu()
+void Game::drawMenu()
 {
-	// Get the background
-	sf::Texture backgroundTexture;
-	backgroundTexture.loadFromFile(MAIN_MENU_TEXTURE_PATH);
-	
-	// Create the text
-	sf::Text playText = this->createText("JOUER", 100, 100);
-	sf::Text settingsText = this->createText("OPTIONS", 100, 200);
-	sf::Text quitText = this->createText("QUITTER", 100, 300);
-
-	// Draw
-	this->gameWindow.draw(sf::Sprite(backgroundTexture));
-	this->drawText(playText);
-	this->drawText(settingsText);
-	this->drawText(quitText);
+	this->gameWindow.draw(sf::Sprite(this->backgroundTexture));
+	for (int i = 0; i < this->textsToDraw.size(); i++)
+	{
+		this->drawText(this->textsToDraw[i]);
+	}
 }
 
-void Game::drawPauseMenu()
-{
-}
-
+// Draw the map in function of the player's coordinates
 void Game::drawInGame()
 {
 	sf::Sprite sprite;
@@ -262,8 +295,8 @@ void Game::drawInGame()
 						16
 					));
 					sprite.setPosition(
-						-this->player.getPositionOnMap().x - WINDOW_WIDTH / 2 + (x + 0.5) * TILE_SIZE,
-						-this->player.getPositionOnMap().y - WINDOW_HEIGHT / 2 + (y - 0.25) * TILE_SIZE
+						(float)(-this->player.getPositionOnMap().x - WINDOW_WIDTH / 2 + (x + 0.5) * TILE_SIZE),
+						(float)(-this->player.getPositionOnMap().y - WINDOW_HEIGHT / 2 + (y - 0.25) * TILE_SIZE)
 					);
 					sprite.setScale(MAP_TILE_SCALE, MAP_TILE_SCALE);
 					this->gameWindow.draw(sprite);
@@ -309,13 +342,17 @@ void Game::changeFontColor(sf::Color color)
 	this->fontColor = color;
 }
 
-sf::Text Game::createText(std::string text, int x, int y)
+// Create and return a text centered in a rect
+sf::Text Game::createText(std::string text, sf::IntRect rect)
 {
 	sf::Text textToReturn;
 	textToReturn.setFont(this->font);
 	textToReturn.setString(text);
 	textToReturn.setCharacterSize(this->fontSize);
 	textToReturn.setFillColor(this->fontColor);
-	textToReturn.setPosition(x, y);
+	textToReturn.setPosition(
+		rect.left + rect.width / 2 - textToReturn.getGlobalBounds().width / 2,
+		rect.top + rect.height / 2 - textToReturn.getGlobalBounds().height / 2
+	);
 	return textToReturn;
 }
