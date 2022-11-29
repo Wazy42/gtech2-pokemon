@@ -3,7 +3,7 @@
 #include <fstream>
 
 Game::Game(Player& player) : 
-	gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled", sf::Style::Fullscreen),
+	gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled", sf::Style::Close),
 	gameState(GameState::MainMenu), 
 	player(player)
 {
@@ -282,9 +282,13 @@ void Game::drawInGame()
 	// Draw the map
 	for (int layer = 0; layer < this->spawnMap.size(); layer++)
 	{
-		for (int y = 0; y < this->spawnMap[layer].size(); y++)
+		int top = std::max(0, (int)(this->player.getPositionOnMap().y / TILE_SIZE - WINDOW_HEIGHT / TILE_SIZE / 2));
+		int bot = std::min((int)this->spawnMap[layer].size(), (int)(this->player.getPositionOnMap().y / TILE_SIZE + WINDOW_HEIGHT / TILE_SIZE / 2 + 2));
+		for (int y = top; y < bot; y++)
 		{
-			for (int x = 0; x < this->spawnMap[layer][y].size(); x++)
+			int left = std::max(0, (int)(this->player.getPositionOnMap().x / TILE_SIZE - WINDOW_WIDTH / TILE_SIZE / 2));
+			int right = std::min((int)this->spawnMap[layer][y].size(), (int)(this->player.getPositionOnMap().x / TILE_SIZE + WINDOW_WIDTH / TILE_SIZE / 2 + 2));
+			for (int x = left; x < right; x++)
 			{
 				int id = this->spawnMap[layer][y][x] - 1;
 				if (id != -1)
@@ -296,8 +300,8 @@ void Game::drawInGame()
 						16
 					));
 					sprite.setPosition(
-						(float)(-this->player.getPositionOnMap().x + (x + 0.5) * TILE_SIZE),
-						(float)(-this->player.getPositionOnMap().y + y * TILE_SIZE)
+						(float)((-this->player.getPositionOnMap().x / TILE_SIZE + x - 0.5) * TILE_SIZE + WINDOW_WIDTH / 2),
+						(float)((-this->player.getPositionOnMap().y / TILE_SIZE + y - 0.5) * TILE_SIZE + WINDOW_HEIGHT / 2)
 					);
 					sprite.setScale(MAP_TILE_SCALE, MAP_TILE_SCALE);
 					this->gameWindow.draw(sprite);
