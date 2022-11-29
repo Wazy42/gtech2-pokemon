@@ -640,7 +640,7 @@
                  "visible":true,
                  "width":0,
                  "x":498,
-                 "y":531.333333333333
+                 "y":532
                 }, 
                 {
                  "class":"",
@@ -651,8 +651,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":294.666666666667,
-                 "y":386.666666666667
+                 "x":294.667,
+                 "y":386.667
                 }, 
                 {
                  "class":"",
@@ -663,19 +663,19 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":758.666666666667,
-                 "y":450.666666666667
+                 "x":758.667,
+                 "y":450.667
                 }, 
                 {
                  "class":"",
-                 "height":13.3333333333334,
+                 "height":13.3333,
                  "id":31,
                  "name":"marketEntry",
                  "rotation":0,
                  "visible":true,
-                 "width":27.3333333333333,
+                 "width":27.3333,
                  "x":546,
-                 "y":295.333333333333
+                 "y":295.333
                 }, 
                 {
                  "class":"",
@@ -684,9 +684,9 @@
                  "name":"hospitalEntry",
                  "rotation":0,
                  "visible":true,
-                 "width":30.6666666666667,
+                 "width":30.6667,
                  "x":412,
-                 "y":150.666666666667
+                 "y":150.667
                 }, 
                 {
                  "class":"",
@@ -695,9 +695,9 @@
                  "name":"hallEntry",
                  "rotation":0,
                  "visible":true,
-                 "width":23.3333333333333,
+                 "width":23.3333,
                  "x":836,
-                 "y":267.333333333333
+                 "y":267.333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -790,7 +790,7 @@
         {
          "columns":148,
          "firstgid":1,
-         "image":"..\/assets\/Addons\/global.png",
+         "image":"..\/assets\/map\/global.png",
          "imageheight":1136,
          "imagewidth":2368,
          "margin":0,
