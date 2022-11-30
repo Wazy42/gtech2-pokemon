@@ -1,0 +1,25 @@
+[{
+    "english": "Normal",
+    "effective": [],
+    "ineffective": [],
+    "no_effect": []
+  },
+  {
+    "english": "Fire",
+    "effective": ["Grass"],
+    "ineffective": ["Fire", "Water"],
+    "no_effect": []
+  },
+  {
+    "english": "Water",
+    "effective": ["Fire"],
+    "ineffective": ["Water", "Grass"],
+    "no_effect": []
+  },
+  {
+    "english": "Grass",
+    "effective": ["Water"],
+    "ineffective": ["Fire", "Grass"],
+    "no_effect": []
+  }
+]

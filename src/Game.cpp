@@ -146,7 +146,7 @@ void Game::managePlayer()
 	{// TODO: Check collisions before moving
 		if (Z_PRESSED || UP_PRESSED)
 		{
-			this->player.setFacing(Direction::North, true);
+			this->player.setFacing(Direction::North, true);	
 		}
 		else if (Q_PRESSED || LEFT_PRESSED)
 		{
