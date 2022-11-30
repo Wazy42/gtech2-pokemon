@@ -2,8 +2,10 @@
 
 #include <SFML/Graphics.hpp>
 #include "Const.h"
-#include "Entity.hpp"
 #include "Player.hpp"
+#include "Pokemon.hpp"
+#include "Battle.hpp"
+#include "Ability.hpp"
 
 
 enum GameState
@@ -29,14 +31,17 @@ public:
 	bool isRunning() const;
 	GameState getGameState() const;
 	void handleEvents();
-	void managePlayer();
+	void manageAndDrawPlayer();
 	void loadMap();
+	Pokemon* getRandomPokemon();
 	
 	// Drawings
+	void moveViewToPlayer();
+	void resetView();
 	void drawEntity(Entity& Entity);
 	void drawText(sf::Text text);
 	void drawMenu();
-	void drawInGame();
+	void drawMapLayer(int layer);
 	void drawInBattle();
 	void clear();
 	void display();
@@ -50,6 +55,7 @@ public:
 private:
 	// Game
 	sf::RenderWindow gameWindow;
+	sf::View gameView;
 	GameState gameState;
 	Player player;
 	sf::Keyboard::Key buffer;
@@ -67,5 +73,10 @@ private:
 	// Menus
 	std::vector<sf::Text> textsToDraw;
 	sf::Texture backgroundTexture;
+
+	// Battle
+	//Battle* battle;
+	std::vector<Pokemon*> pokemonList;
+	std::vector<Ability*> abilityList;
 };
 

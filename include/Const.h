@@ -26,13 +26,30 @@
 #define MAP_TEXTURE_PATH "assets/map/global.png"
 #define MAP_SPRITE_COORDS(id) sf::IntRect((id % 148) * MAP_TILE_SIZE, (int)(id / 148) * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE)
 #define MAP_SPAWN_PATH "data/spawn.map"
+#define LAYER_OBSTACLES 4 // Rendered above the player
+#define LAYER_DECORATIONS 3 // Rendered above the player
+#define LAYER_SPAWN 2 // Rendered below the player
+#define LAYER_WALKABLE 1 // Rendered below the player
+#define LAYER_GROUD 0 // Rendered below the player
+
+// Battle
+#define BATTLE_TEXTURE_PATH "assets/gui/combat.png"
+#define SPAWN_CHANCE 0.5f
+#define DOUBLE_CHANCE 0.3f
+#define TRIPLE_CHANCE 0.1f
+// TODO: Add abilities rect coordinates
+#define ABILITY_ONE_BUTON_RECT sf::IntRect(0, 0, 0, 0)
+#define ABILITY_TWO_BUTON_RECT sf::IntRect(0, 0, 0, 0)
+#define ABILITY_THREE_BUTON_RECT sf::IntRect(0, 0, 0, 0)
+#define ABILITY_FOUR_BUTON_RECT sf::IntRect(0, 0, 0, 0)
 
 // Player
 #define PLAYER_SIZE 64
 #define PLAYER_SCALE (TILE_SIZE / PLAYER_SIZE)
 #define PLAYER_TEXTURE_PATH "assets/player/player.png"
 #define PLAYER_ANIM_COORDS(dir) { sf::IntRect(0, dir * 64, 64, 64), sf::IntRect(64, dir * 64, 64, 64), sf::IntRect(128, dir * 64, 64, 64), sf::IntRect(192, dir * 64, 64, 64)}
-#define PLAYER_MOVEMENT_SPEED 2
+#define PLAYER_WALK_SPEED 1
+#define PLAYER_RUN_SPEED 2
 
 // Keys
 #define isPressed(a) sf::Keyboard::isKeyPressed(a)

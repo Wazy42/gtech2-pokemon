@@ -1,5 +1,18 @@
 #include "../include/Pokemon.hpp"
 
+Pokemon::Pokemon(const sf::Texture texture, std::string name, int level, int hp, int atk, int def, int spd, std::array<Ability*, 4>, Type type) : Entity(texture)
+{
+	this->name = name;
+	this->type = type;
+	this->level = level;
+	this->hp = hp;
+	this->maxHp = hp;
+	this->atk = atk;
+	this->def = def;
+	this->spd = spd;
+	this->alive = true;
+}
+
 // Add HPs, can not exceed the maximum of HP
 void Pokemon::addHp(int v)
 {

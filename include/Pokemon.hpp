@@ -10,9 +10,10 @@
 // Forward declaration (because Ability and Pokemon are dependent on each other)
 class Ability;
 
-class Pokemon : public AnimatedEntity
+class Pokemon : public Entity
 {
 public:
+	Pokemon(const sf::Texture texture, std::string name, int level, int hp, int attack, int defense, int speed, std::array<Ability*, 4> abilities, Type type);
 	// GET STATS
 	std::string getName() { return this->name; };
 	Type getType() { return this->type; };
