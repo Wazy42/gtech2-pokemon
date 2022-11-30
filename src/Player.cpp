@@ -5,29 +5,28 @@ Player::Player(const sf::Texture& texture) : AnimatedEntity(texture, PLAYER_ANIM
 	this->position = sf::Vector2f(0, 0);
 	this->direction = South;
 	this->moving = false;
-	this->setSpritePosition(
-		(WINDOW_WIDTH - PLAYER_SIZE * PLAYER_SCALE) / 2, 
-		(WINDOW_HEIGHT - PLAYER_SIZE * PLAYER_SCALE) / 2
-	);
+	this->setSpritePosition(0, 0);
 	this->sprite.setScale(PLAYER_SCALE, PLAYER_SCALE);
 }
 
 // Move the player on the map by x and y (movement)
-void Player::moveOnMap(int x, int y)
+void Player::moveOnMap(float x, float y)
 {
-	this->position.x += x;
-	this->position.y += y;
+	this->position.x = roundf((this->position.x + x) * 100) / 100;
+	this->position.y = roundf((this->position.y + y) * 100) / 100;
+	this->moveSprite(x * TILE_SIZE, y * TILE_SIZE);
 }
 
 void Player::moveOnMap(sf::Vector2f pos)
 {
-	this->position += pos;
+	this->moveOnMap(pos.x, pos.y);
 }
 
 // Set the player coordinates on the map (teleportation)
 void Player::setPositionOnMap(sf::Vector2f pos)
 {
 	this->position = pos;
+	this->setSpritePosition((float)(pos.x * TILE_SIZE - PLAYER_SCALE), (float)(pos.y * TILE_SIZE));
 }
 
 // Get position of the player on the map
@@ -39,7 +38,7 @@ sf::Vector2f Player::getPositionOnMap() const
 // True if the player is on the center of a tile
 bool Player::isOnATile() const
 {
-	return ((int)this->position.x % TILE_SIZE == 0 && (int)this->position.y % TILE_SIZE == 0);
+	return (this->position.x == roundf(this->position.x) && this->position.y == roundf(this->position.y));
 }
 
 // Set the facing of the player (affect his sprite)
@@ -60,6 +59,8 @@ Direction Player::getFacing() const
 void Player::stopMoving()
 {
 	this->moving = false;
+	this->position.x = floorf(this->position.x);
+	this->position.y = floorf(this->position.y);
 }
 
 // Returns if the player is moving or not

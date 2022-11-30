@@ -1,20 +1,20 @@
-#include "../include/Combat.hpp"
+#include "../include/Battle.hpp"
 
-Combat::Combat(Pokemon* ally, Pokemon* enemy)
+Battle::Battle(Pokemon* ally, Pokemon* enemy)
 {
 	this->allies.push_back(ally);
 	this->enemies.push_back(enemy);
 	this->init();
 }
 
-Combat::Combat(std::vector<Pokemon*> allies, std::vector<Pokemon*> enemies)
+Battle::Battle(std::vector<Pokemon*> allies, std::vector<Pokemon*> enemies)
 {
 	this->allies = allies;
 	this->enemies = enemies;
 	this->init();
 }
 
-void Combat::init()
+void Battle::init()
 {
 	for (Pokemon* p : this->allies)
 	{
@@ -27,12 +27,13 @@ void Combat::init()
 }
 
 // returns true if the player wins, false otherwise
-bool Combat::start()
+bool Battle::start()
 {
+	// TODO: Battle!
 	return true;
 }
 
-Pokemon* Combat::getNextActive()
+Pokemon* Battle::getNextActive()
 {
 	// Sort roundPoints by asc then take the pokemon with the lowest score
 	this->sortRoundPoints();
@@ -44,7 +45,12 @@ Pokemon* Combat::getNextActive()
 	return next;
 }
 
-void Combat::sortRoundPoints()
+void Battle::sortRoundPoints()
 {
 	std::sort(this->roundPoints.begin(), this->roundPoints.end(), sorttuple);
+}
+
+ bool Battle::sorttuple(const tpi& a, const tpi& b)
+{
+	return std::get<1>(a) < std::get<1>(b);
 }

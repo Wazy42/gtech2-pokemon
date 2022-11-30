@@ -7,6 +7,7 @@ Game::Game(Player& player) :
 	gameState(GameState::MainMenu), 
 	player(player)
 {
+	gameView = gameWindow.getView();
 	gameWindow.setFramerateLimit(FPS_LIMIT);
 }
 
@@ -28,6 +29,7 @@ void Game::switchToMainMenu()
 	this->textsToDraw.push_back(this->createText("Settings", SETTINGS_BUTTON_RECT));
 	this->textsToDraw.push_back(this->createText("Quit", QUIT_BUTTON_RECT));
 	
+	this->resetView();
 	this->gameState = GameState::MainMenu;
 }
 
@@ -38,7 +40,7 @@ void Game::switchToPauseMenu()
 	
 	// Create the text
 	this->changeFont(FONT_SPINWERAD_PATH);
-	this->changeFontColor(sf::Color::Blue);
+	this->changeFontColor(sf::Color::Yellow);
 	this->changeFontSize(FONT_SIZE_MENU);
 
 	this->textsToDraw.clear();
@@ -46,16 +48,22 @@ void Game::switchToPauseMenu()
 	this->textsToDraw.push_back(this->createText("Save to main menu", MAIN_MENU_BUTTON_RECT));
 	this->textsToDraw.push_back(this->createText("Save and quit", SAVE_AND_QUIT_BUTTON_RECT));
 	
+	this->resetView();
 	this->gameState = GameState::PauseMenu;
 }
 
 void Game::switchToInGame()
 {
+	this->resetView();
 	this->gameState = GameState::InGame;
 }
 
 void Game::switchToInBattle()
 {
+	// Get the background
+	this->backgroundTexture.loadFromFile(BATTLE_TEXTURE_PATH);
+
+	this->resetView();
 	this->gameState = GameState::InBattle;
 }
 
@@ -133,34 +141,44 @@ void Game::handleEvents()
 	}
 }
 
-void Game::managePlayer()
+void Game::manageAndDrawPlayer()
 {
 	// Player has to end his movement
 	if (this->player.isMoving() && this->player.isOnATile())
 	{
 		this->player.stopMoving();
+		
+		//// If player is on a spawn tile, he may encounter a wild pokemon
+		//if (this->spawnMap[LAYER_SPAWN][this->player.getPositionOnMap().y][this->player.getPositionOnMap().x] != 0)
+		//{
+		//	// Generate ennemies
+		//	std::vector<Pokemon*> ennemies;
+		//	ennemies.push_back(this->getRandomPokemon());
+		//	
+		//	this->switchToInBattle();
+		//}
 	}
 
 	// Check if player wants to move
 	if (!player.isMoving()) 
-	{// TODO: Check collisions before moving
+	{
 		if (Z_PRESSED || UP_PRESSED)
 		{
-			this->player.setFacing(Direction::North, true);
-		}
-		else if (Q_PRESSED || LEFT_PRESSED)
-		{
-			this->player.setFacing(Direction::West, true);
+			this->player.setFacing(Direction::North, this->spawnMap[LAYER_OBSTACLES][(int)this->player.getPositionOnMap().y - 1][(int)this->player.getPositionOnMap().x] == 0);
 		}
 		else if (S_PRESSED || DOWN_PRESSED)
 		{
-			this->player.setFacing(Direction::South, true);
+			this->player.setFacing(Direction::South, this->spawnMap[LAYER_OBSTACLES][(int)this->player.getPositionOnMap().y + 1][(int)this->player.getPositionOnMap().x] == 0);
+		}
+		else if (Q_PRESSED || LEFT_PRESSED)
+		{
+			this->player.setFacing(Direction::West, this->spawnMap[LAYER_OBSTACLES][(int)this->player.getPositionOnMap().y][(int)this->player.getPositionOnMap().x - 1] == 0);
 		}
 		else if (D_PRESSED || RIGHT_PRESSED)
 		{
-			this->player.setFacing(Direction::East, true);
+			this->player.setFacing(Direction::East, this->spawnMap[LAYER_OBSTACLES][(int)this->player.getPositionOnMap().y][(int)this->player.getPositionOnMap().x + 1] == 0);
 		}
-		else
+		if (!this->player.isMoving())
 		{
 			this->player.setCurrentFrame(0);
 		}
@@ -169,25 +187,28 @@ void Game::managePlayer()
 	// Animate the walk
 	if (player.isMoving())
 	{
-		if ((int)(this->player.getPositionOnMap().x + this->player.getPositionOnMap().y) % 16 == 0)
+		if (player.getPositionOnMap().x == (int)player.getPositionOnMap().x && player.getPositionOnMap().y == (int)player.getPositionOnMap().y)
 			this->player.gotoNextFrame();
 		
 		switch (this->player.getFacing())
 		{
 		case Direction::North:
-			this->player.moveOnMap(0, -PLAYER_MOVEMENT_SPEED);
-			break;
-		case Direction::West:
-			this->player.moveOnMap(-PLAYER_MOVEMENT_SPEED, 0);
+			this->player.moveOnMap(0, (float)(-0.1 * PLAYER_WALK_SPEED));
 			break;
 		case Direction::South:
-			this->player.moveOnMap(0, PLAYER_MOVEMENT_SPEED);
+			this->player.moveOnMap(0, (float)(0.1 * PLAYER_WALK_SPEED));
+			break;
+		case Direction::West:
+			this->player.moveOnMap((float)(-0.1 * PLAYER_WALK_SPEED), 0);
 			break;
 		case Direction::East:
-			this->player.moveOnMap(PLAYER_MOVEMENT_SPEED, 0);
+			this->player.moveOnMap((float)(0.1 * PLAYER_WALK_SPEED), 0);
 			break;
 		}
 	}
+
+	// Draw player
+	this->gameWindow.draw(this->player.getSprite());
 }
 
 void Game::loadMap()
@@ -253,6 +274,26 @@ void Game::loadMap()
 	}
 }
 
+Pokemon* Game::getRandomPokemon()
+{
+	// TODO: get a random pokemon with a lvl similar to the player's lvl
+	return new Pokemon(sf::Texture(), "Test", 0, 0, 0, 0, 0, std::array<Ability*, 4>(), Normal);
+}
+
+void Game::moveViewToPlayer()
+{
+	// Move the view to the player
+	this->gameView.setCenter(this->player.getPositionOnMap().x * TILE_SIZE + TILE_SIZE / 2, this->player.getPositionOnMap().y * TILE_SIZE + TILE_SIZE / 2);
+	gameWindow.setView(gameView);
+}
+
+void Game::resetView()
+{
+	// Reset the view
+	this->gameView.setCenter(floorf((float)this->gameWindow.getSize().x / 2), floorf((float)this->gameWindow.getSize().y / 2));
+	gameWindow.setView(gameView);
+}
+
 void Game::drawEntity(Entity& Entity)
 {
 	this->gameWindow.draw(Entity.getSprite());
@@ -274,44 +315,36 @@ void Game::drawMenu()
 }
 
 // Draw the map in function of the player's coordinates
-void Game::drawInGame()
+void Game::drawMapLayer(int layer)
 {
 	sf::Sprite sprite;
 	sprite.setTexture(this->globalTexture);
-	
-	// Draw the map
-	for (int layer = 0; layer < this->spawnMap.size(); layer++)
+	int playerX = (int)(this->player.getPositionOnMap().x);
+	int playerY = (int)(this->player.getPositionOnMap().y);
+
+	int top = std::max(0, playerY - WINDOW_HEIGHT / TILE_SIZE / 2);
+	int bot = std::min((int)this->spawnMap[layer].size(), playerY + WINDOW_HEIGHT / TILE_SIZE / 2 + 2);
+	for (int y = top; y < bot; y++)
 	{
-		int top = std::max(0, (int)(this->player.getPositionOnMap().y / TILE_SIZE - WINDOW_HEIGHT / TILE_SIZE / 2));
-		int bot = std::min((int)this->spawnMap[layer].size(), (int)(this->player.getPositionOnMap().y / TILE_SIZE + WINDOW_HEIGHT / TILE_SIZE / 2 + 2));
-		for (int y = top; y < bot; y++)
+		int left = std::max(0, playerX - WINDOW_WIDTH / TILE_SIZE / 2);
+		int right = std::min((int)this->spawnMap[layer][y].size(), playerX + WINDOW_WIDTH / TILE_SIZE / 2 + 2);
+		for (int x = left; x < right; x++)
 		{
-			int left = std::max(0, (int)(this->player.getPositionOnMap().x / TILE_SIZE - WINDOW_WIDTH / TILE_SIZE / 2));
-			int right = std::min((int)this->spawnMap[layer][y].size(), (int)(this->player.getPositionOnMap().x / TILE_SIZE + WINDOW_WIDTH / TILE_SIZE / 2 + 2));
-			for (int x = left; x < right; x++)
+			int id = this->spawnMap[layer][y][x] - 1;
+			if (id != -1)
 			{
-				int id = this->spawnMap[layer][y][x] - 1;
-				if (id != -1)
-				{
-					sprite.setTextureRect(sf::IntRect(
-						(id % 148) * MAP_TILE_SIZE,
-						(id / 148) * MAP_TILE_SIZE,
-						16,
-						16
-					));
-					sprite.setPosition(
-						(float)((-this->player.getPositionOnMap().x / TILE_SIZE + x - 0.5) * TILE_SIZE + WINDOW_WIDTH / 2),
-						(float)((-this->player.getPositionOnMap().y / TILE_SIZE + y - 0.5) * TILE_SIZE + WINDOW_HEIGHT / 2)
-					);
-					sprite.setScale(MAP_TILE_SCALE, MAP_TILE_SCALE);
-					this->gameWindow.draw(sprite);
-				}
+				sprite.setTextureRect(sf::IntRect(
+					(id % 148) * MAP_TILE_SIZE,
+					(id / 148) * MAP_TILE_SIZE,
+					16,
+					16
+				));
+				sprite.setPosition((float)(x * TILE_SIZE), (float)(y * TILE_SIZE));
+				sprite.setScale(MAP_TILE_SCALE, MAP_TILE_SCALE);
+				this->gameWindow.draw(sprite);
 			}
 		}
 	}
-
-	// Draw player
-	this->gameWindow.draw(this->player.getSprite());
 }
 
 void Game::drawInBattle()

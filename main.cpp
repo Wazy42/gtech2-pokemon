@@ -3,11 +3,7 @@
 #include "include/Game.hpp"
 #include "include/Const.h"
 #include "include/Player.hpp"
-#include "include/AnimatedEntity.hpp"
-#include "include/Entity.hpp"
 #include <iostream>
-#include "include/Pokemon.hpp"
-#include "include/Ability.hpp"
 
 
 int main()
@@ -19,6 +15,7 @@ int main()
     }
 	
 	Player louis = Player(texture);
+	louis.setPositionOnMap(sf::Vector2f(40, 53));
 	
 	Game g(louis);
 	g.switchToMainMenu();
@@ -36,8 +33,13 @@ int main()
 			g.drawMenu();
 			break;
 		case GameState::InGame:
-			g.managePlayer();
-			g.drawInGame();
+			g.drawMapLayer(LAYER_GROUD);
+			g.drawMapLayer(LAYER_WALKABLE);
+			g.drawMapLayer(LAYER_SPAWN);
+			g.manageAndDrawPlayer();
+			g.drawMapLayer(LAYER_DECORATIONS);
+			g.drawMapLayer(LAYER_OBSTACLES);
+			g.moveViewToPlayer();
 			break;
 		case GameState::InBattle:
 			g.drawInBattle();

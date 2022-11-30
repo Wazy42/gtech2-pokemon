@@ -2,20 +2,18 @@
 
 #include "Pokemon.hpp"
 #include <vector>
+#include <tuple>
 
 typedef std::tuple<Pokemon*, int> tpi;
-bool sorttuple(const tpi& a, const tpi& b)
-{
-	return (std::get<1>(a) < std::get<1>(b));
-}
 
-class Combat
+class Battle
 {
 public:
-	Combat(Pokemon* ally, Pokemon* enemy);
-	Combat(std::vector<Pokemon*> allies, std::vector<Pokemon*> enemies);
+	Battle(Pokemon* ally, Pokemon* enemy);
+	Battle(std::vector<Pokemon*> allies, std::vector<Pokemon*> enemies);
 	void init();
 	bool start();
+	static bool sorttuple(const tpi& a, const tpi& b);
 
 private:
 	std::vector<Pokemon*> allies;
