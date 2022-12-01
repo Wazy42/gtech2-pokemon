@@ -48,6 +48,10 @@
 #define PLAYER_WALK_SPEED 1
 #define PLAYER_RUN_SPEED 2
 
+
+// Save 
+#define SAVE_FILE_PATH "data/save/save.data"
+
 // Keys
 #define isPressed(a) sf::Keyboard::isKeyPressed(a)
 #define Z_PRESSED isPressed(sf::Keyboard::Z)
