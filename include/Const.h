@@ -25,7 +25,7 @@
 #define MAP_TILE_SCALE (TILE_SIZE / MAP_TILE_SIZE)
 #define MAP_TEXTURE_PATH "assets/map/global.png"
 #define MAP_SPRITE_COORDS(id) sf::IntRect((id % 148) * MAP_TILE_SIZE, (int)(id / 148) * MAP_TILE_SIZE, MAP_TILE_SIZE, MAP_TILE_SIZE)
-#define MAP_SPAWN_PATH "data/spawn.map"
+#define MAP_SPAWN_PATH "data/map/spawn.map"
 #define LAYER_OBSTACLES 4 // Rendered above the player
 #define LAYER_DECORATIONS 3 // Rendered above the player
 #define LAYER_SPAWN 2 // Rendered below the player
@@ -33,11 +33,8 @@
 #define LAYER_GROUD 0 // Rendered below the player
 
 // Battle
-#define BATTLE_TEXTURE_PATH "assets/gui/combat.png"
-#define SPAWN_CHANCE 0.5f
-#define DOUBLE_CHANCE 0.3f
-#define TRIPLE_CHANCE 0.1f
-// TODO: Add abilities rect coordinates
+#define BATTLE_TEXTURE_PATH "assets/gui/battle_screen.png"
+#define SPAWN_CHANCE 10
 #define ABILITY_ONE_BUTON_RECT sf::IntRect(0, 0, 0, 0)
 #define ABILITY_TWO_BUTON_RECT sf::IntRect(0, 0, 0, 0)
 #define ABILITY_THREE_BUTON_RECT sf::IntRect(0, 0, 0, 0)
@@ -71,3 +68,8 @@
 #define FONT_SIZE_GAME 20
 #define FONT_SIZE_MENU 50
 #define FONT_COLOR sf::Color::Black
+
+// Pokemon and abilities
+#define POKEMON_LIST_PATH "data/pokemon/pokemon.dat"
+#define POKEMON_TEXTURE_PATH "assets/pokemon/"
+#define ABILITY_LIST_PATH "data/pokemon/ability.dat"

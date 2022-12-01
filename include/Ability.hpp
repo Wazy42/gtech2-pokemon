@@ -2,27 +2,21 @@
 
 #include "Pokemon.hpp"
 #include "Types.hpp"
-#include "Entity.hpp"
 #include <vector>
 
 // Base abstract class
-class Ability : public Entity
+class Ability
 {
 public:
+	Ability(std::string name, int power, Type type);
 	// GET METHODS
 	std::string getName() { return this->name; };
+	int getPower() { return this->power; };
 	Type getType() { return this->type; };
 
-	virtual void resolve(Pokemon* caster, Pokemon* target) {};
+	void resolve(Pokemon* caster, Pokemon* target);
 protected:
 	std::string name;
+	int power;
 	Type type;
-};
-
-// Derived classes
-class Attack : public Ability
-{
-public:
-	void resolve(Pokemon* caster, Pokemon* target);
-private:
 };

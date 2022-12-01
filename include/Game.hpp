@@ -31,9 +31,14 @@ public:
 	bool isRunning() const;
 	GameState getGameState() const;
 	void handleEvents();
-	void manageAndDrawPlayer();
+	void manageAndDrawPlayer(int frame);
+	void manageAndDrawBattle(int frame);
 	void loadMap();
-	Pokemon* getRandomPokemon();
+	void loadPokemons();
+	void loadAbilities();
+
+	// Battle
+	Pokemon* createRandomPokemon();
 	
 	// Drawings
 	void moveViewToPlayer();
@@ -42,7 +47,6 @@ public:
 	void drawText(sf::Text text);
 	void drawMenu();
 	void drawMapLayer(int layer);
-	void drawInBattle();
 	void clear();
 	void display();
 
@@ -75,8 +79,8 @@ private:
 	sf::Texture backgroundTexture;
 
 	// Battle
-	//Battle* battle;
-	std::vector<Pokemon*> pokemonList;
+	Battle* battle;
+	std::vector<std::vector<std::string>> pokemonList; // Array of [name, image_name, type, hp, atk, def, spd]
 	std::vector<Ability*> abilityList;
 };
 

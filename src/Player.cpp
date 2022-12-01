@@ -68,3 +68,27 @@ bool Player::isMoving() const
 {
 	return this->moving;
 }
+
+// Add a pokemon to the player team
+void Player::addPokemon(Pokemon* pokemon)
+{
+	this->team.push_back(pokemon);
+}
+
+// Get the player team
+std::vector<Pokemon*> Player::getTeam()
+{
+	return this->team;
+}
+
+// Get the highest level pokemon in the team
+Pokemon* Player::getHighestLvlPokemon()
+{
+	Pokemon* highestLvl = this->team[0];
+	for (int i = 1; i < this->team.size(); i++)
+	{
+		if (this->team[i]->getLevel() > highestLvl->getLevel())
+			highestLvl = this->team[i];
+	}
+	return highestLvl;
+}

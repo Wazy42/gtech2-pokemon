@@ -2,55 +2,22 @@
 
 Battle::Battle(Pokemon* ally, Pokemon* enemy)
 {
-	this->allies.push_back(ally);
-	this->enemies.push_back(enemy);
-	this->init();
+	this->ally = ally;
+	this->enemy = enemy;
+	this->round = 0;
 }
 
-Battle::Battle(std::vector<Pokemon*> allies, std::vector<Pokemon*> enemies)
+// Returns the Pokemon that will play next
+Pokemon* Battle::getNextTurn()
 {
-	this->allies = allies;
-	this->enemies = enemies;
-	this->init();
-}
-
-void Battle::init()
-{
-	for (Pokemon* p : this->allies)
+	if (this->round == 0 && this->enemy->getSpd() > this->ally->getSpd() || this->round % 2 == 1)
 	{
-		this->roundPoints.push_back({ p, 1000/(*p).getSpd() });
+		this->round++;
+		return this->enemy;
 	}
-	for (Pokemon* p : this->enemies)
+	else
 	{
-		this->roundPoints.push_back({ p, 1000/(*p).getSpd() });
+		this->round++;
+		return this->ally;
 	}
-}
-
-// returns true if the player wins, false otherwise
-bool Battle::start()
-{
-	// TODO: Battle!
-	return true;
-}
-
-Pokemon* Battle::getNextActive()
-{
-	// Sort roundPoints by asc then take the pokemon with the lowest score
-	this->sortRoundPoints();
-	Pokemon* next = std::get<0>(this->roundPoints[0]);
-	// Adding 1000 over the pokemon's speed to their round points
-	// This will make pokemon with higher speed to attack more often than other
-	std::get<1>(this->roundPoints[0]) += 1000 / (*next).getSpd();
-
-	return next;
-}
-
-void Battle::sortRoundPoints()
-{
-	std::sort(this->roundPoints.begin(), this->roundPoints.end(), sorttuple);
-}
-
- bool Battle::sorttuple(const tpi& a, const tpi& b)
-{
-	return std::get<1>(a) < std::get<1>(b);
 }

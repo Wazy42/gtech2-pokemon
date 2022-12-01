@@ -3,7 +3,6 @@
 #include "Pokemon.hpp"
 #include "AnimatedEntity.hpp"
 #include <SFML/Graphics.hpp>
-#include <array>
 #include "Const.h"
 
 enum Direction
@@ -31,10 +30,17 @@ public:
 	Direction getFacing() const;
 	void stopMoving();
 	bool isMoving() const;
+
+	// Player team
+	void addPokemon(Pokemon* pokemon);
+	std::vector<Pokemon*> getTeam();
+	Pokemon* getHighestLvlPokemon();
+	
 	
 private:
 	sf::Vector2f position; // Position in the map
 	Direction direction; // Direction the player is facing
 	bool moving = false;
+	std::vector<Pokemon*> team;
 };
 

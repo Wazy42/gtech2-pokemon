@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Types.hpp"
-#include "AnimatedEntity.hpp"
+#include "Entity.hpp"
 #include <string>
-#include <array>
 #include <iostream>
 #include <vector>
 
@@ -13,7 +12,7 @@ class Ability;
 class Pokemon : public Entity
 {
 public:
-	Pokemon(const sf::Texture texture, std::string name, int level, int hp, int attack, int defense, int speed, std::array<Ability*, 4> abilities, Type type);
+	Pokemon(const sf::Texture texture, std::string name, int level, int hp, int attack, int defense, int speed, std::vector<Ability*> abilities, Type type);
 	// GET STATS
 	std::string getName() { return this->name; };
 	Type getType() { return this->type; };
@@ -33,7 +32,7 @@ public:
 	void setSpd(int v) { this->spd = v; };
 	void revive();
 	// ABILITIES (declared in "Abiliy.cpp" file)
-	std::array<Ability*, 4> getAbilities();
+	std::vector<Ability*> getAbilities();
 	void learn(Ability* a, int position);
 	void use(int aNum, std::vector<Pokemon> targets);
 
@@ -42,6 +41,6 @@ private:
 	Type type;
 	int level;
 	int hp, maxHp, atk, def, spd;
-	std::array<Ability*, 4> abilities;
+	std::vector<Ability*> abilities;
 	bool alive;
 };

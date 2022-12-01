@@ -1,15 +1,22 @@
 #include "../include/Ability.hpp"
 
+Ability::Ability(std::string name, int power, Type type)
+{
+	this->name = name;
+	this->power = power;
+	this->type = type;
+}
+
 // Resolve an attack cast by a Pokemon to deal damage to another
-void Attack::resolve(Pokemon* caster, Pokemon* target)
+void Ability::resolve(Pokemon* caster, Pokemon* target)
 {
 	// Formula adapted from the original pokemon game gen 1
 	// See: https://bulbapedia.bulbagarden.net/wiki/Damage
 	float finalDamages = (
-		((3.0f * (*caster).getLevel() / 2.0f + 2.0f) *
-		(*caster).getAtk() / (*target).getDef() / 40.0f + 2.0f) *
-		((*caster).getType() == this->type ? 1.5f : 1.0f) *
-		getMultiplier(this->type, (*target).getType()) *
+		((2.0f * caster->getLevel() / 5.0f + 2.0f) *
+		this->power * caster->getAtk() / target->getDef() / 50.0f + 2.0f) *
+		(caster->getType() == this->type ? 1.5f : 1.0f) *
+		getMultiplier(this->type, target->getType()) *
 		(0.85f + rand() * 0.15f)
 	);
 
@@ -21,7 +28,7 @@ void Attack::resolve(Pokemon* caster, Pokemon* target)
 /// Here are the definitions of Pokemon's methods that use Ability
 
 // Returns the Pokemon's ability list
-std::array<Ability*, 4> Pokemon::getAbilities()
+std::vector<Ability*> Pokemon::getAbilities()
 {
 	return this->abilities;
 }

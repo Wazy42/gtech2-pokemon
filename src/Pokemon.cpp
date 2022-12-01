@@ -1,6 +1,6 @@
 #include "../include/Pokemon.hpp"
 
-Pokemon::Pokemon(const sf::Texture texture, std::string name, int level, int hp, int atk, int def, int spd, std::array<Ability*, 4>, Type type) : Entity(texture)
+Pokemon::Pokemon(const sf::Texture texture, std::string name, int level, int hp, int atk, int def, int spd, std::vector<Ability*>, Type type) : Entity(texture)
 {
 	this->name = name;
 	this->type = type;

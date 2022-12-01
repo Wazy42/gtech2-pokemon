@@ -20,7 +20,10 @@ int main()
 	Game g(louis);
 	g.switchToMainMenu();
 	g.loadMap();
+	g.loadAbilities();
+	g.loadPokemons();
 
+	int frame = 0;
 	while (g.isRunning())
 	{
 		g.handleEvents();
@@ -36,17 +39,18 @@ int main()
 			g.drawMapLayer(LAYER_GROUD);
 			g.drawMapLayer(LAYER_WALKABLE);
 			g.drawMapLayer(LAYER_SPAWN);
-			g.manageAndDrawPlayer();
+			g.manageAndDrawPlayer(frame);
 			g.drawMapLayer(LAYER_DECORATIONS);
 			g.drawMapLayer(LAYER_OBSTACLES);
 			g.moveViewToPlayer();
 			break;
 		case GameState::InBattle:
-			g.drawInBattle();
+			g.manageAndDrawBattle(frame);
 			break;
 		}
 		
 		g.display();
+		frame = (frame + 1) % FPS_LIMIT;
 	}
     return 0;
 }

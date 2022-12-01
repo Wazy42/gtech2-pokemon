@@ -62,8 +62,15 @@ void Game::switchToInBattle()
 {
 	// Get the background
 	this->backgroundTexture.loadFromFile(BATTLE_TEXTURE_PATH);
-
 	this->resetView();
+
+	this->textsToDraw.clear();
+	
+	// Create the battle
+	this->battle = new Battle(
+		this->player.getTeam()[0],
+		this->createRandomPokemon()
+	);
 	this->gameState = GameState::InBattle;
 }
 
@@ -141,22 +148,21 @@ void Game::handleEvents()
 	}
 }
 
-void Game::manageAndDrawPlayer()
+void Game::manageAndDrawPlayer(int frame)
 {
 	// Player has to end his movement
 	if (this->player.isMoving() && this->player.isOnATile())
 	{
 		this->player.stopMoving();
 		
-		//// If player is on a spawn tile, he may encounter a wild pokemon
-		//if (this->spawnMap[LAYER_SPAWN][this->player.getPositionOnMap().y][this->player.getPositionOnMap().x] != 0)
-		//{
-		//	// Generate ennemies
-		//	std::vector<Pokemon*> ennemies;
-		//	ennemies.push_back(this->getRandomPokemon());
-		//	
-		//	this->switchToInBattle();
-		//}
+		// If player is on a spawn tile, he may encounter a wild pokemon
+		if (this->spawnMap[LAYER_SPAWN][this->player.getPositionOnMap().y][this->player.getPositionOnMap().x] != 0)
+		{
+			int random = rand() % 100;
+			if (random < SPAWN_CHANCE) {
+				this->switchToInBattle();
+			}
+		}
 	}
 
 	// Check if player wants to move
@@ -187,7 +193,7 @@ void Game::manageAndDrawPlayer()
 	// Animate the walk
 	if (player.isMoving())
 	{
-		if (player.getPositionOnMap().x == (int)player.getPositionOnMap().x && player.getPositionOnMap().y == (int)player.getPositionOnMap().y)
+		if (frame % 4 == 0)
 			this->player.gotoNextFrame();
 		
 		switch (this->player.getFacing())
@@ -211,6 +217,15 @@ void Game::manageAndDrawPlayer()
 	this->gameWindow.draw(this->player.getSprite());
 }
 
+void Game::manageAndDrawBattle(int frame)
+{
+	this->gameWindow.draw(sf::Sprite(this->backgroundTexture));
+	for (int i = 0; i < this->textsToDraw.size(); i++)
+	{
+		this->drawText(this->textsToDraw[i]);
+	}
+}
+
 void Game::loadMap()
 {
 	// Load textures
@@ -221,7 +236,7 @@ void Game::loadMap()
 	std::string line;
 	std::fstream file;
 	//Open the file in read mode
-	file.open("data/map/spawn.map", std::ios::in);
+	file.open(MAP_SPAWN_PATH, std::ios::in);
 	if (file.is_open())
 	{
 		while (getline(file, line))
@@ -237,7 +252,7 @@ void Game::loadMap()
 	std::string temp = ""; 
 	std::vector<int> row = std::vector<int>();
 	std::vector<std::vector<int>> layer = std::vector<std::vector<int>>();
-	this->spawnMap = std::vector<std::vector<std::vector<int>>>(); // reset map
+	this->spawnMap.clear(); // reset map
 	for (int i = 0; i < data.size(); i++)
 	{
 		// new tile
@@ -274,10 +289,167 @@ void Game::loadMap()
 	}
 }
 
-Pokemon* Game::getRandomPokemon()
+void Game::loadPokemons() {
+	std::string data;
+	std::string line;
+	std::fstream file;
+	
+	//Open the file in read mode
+	file.open(POKEMON_LIST_PATH, std::ios::in);
+	if (file.is_open())
+	{
+		while (getline(file, line))
+			data += line;
+		file.close();
+	}
+	else
+	{
+		throw std::runtime_error("Error while opening the file");
+	}
+
+	// Fill the pokemon list
+	this->pokemonList.clear();
+	std::string temp = "";
+	std::vector<std::string> pokemonStats = std::vector<std::string>();
+	for (int i = 0; i < data.size(); i++)
+	{
+		// new pokemon
+		if (data[i] == ';')
+		{
+			if (pokemonStats != std::vector<std::string>())
+			{
+				this->pokemonList.push_back(pokemonStats);
+				pokemonStats = std::vector<std::string>();
+			}
+		}
+		// new stat
+		else if (data[i] == ',')
+		{
+			if (temp != "")
+			{
+				pokemonStats.push_back(temp);
+				temp = "";
+			}
+		}
+		else
+			temp += data[i];
+	}
+	
+	// Get the player his first pokemon Eevee
+	sf::Texture texture;
+	texture.loadFromFile(POKEMON_TEXTURE_PATH + std::string("133.png"));
+	std::string name = "Eevee";
+	int lvl = 1;
+	int hp = 55;
+	int atk = 55;
+	int def = 50;
+	int spd = 55;
+	Type type = Type::Normal;
+	std::vector<Ability*> abilities = std::vector<Ability*>();
+	abilities.push_back(this->abilityList[2]);
+	this->player.addPokemon(new Pokemon(texture, name, lvl, hp, atk, def, spd, abilities, type));
+}
+
+void Game::loadAbilities()
 {
-	// TODO: get a random pokemon with a lvl similar to the player's lvl
-	return new Pokemon(sf::Texture(), "Test", 0, 0, 0, 0, 0, std::array<Ability*, 4>(), Normal);
+	std::string data;
+	std::string line;
+	std::fstream file;
+
+	//Open the file in read mode
+	file.open(ABILITY_LIST_PATH, std::ios::in);
+	if (file.is_open())
+	{
+		while (getline(file, line))
+			data += line;
+		file.close();
+	}
+	else
+	{
+		throw std::runtime_error("Error while opening the file");
+	}
+
+	// Fill the ability list
+	this->abilityList.clear();
+	std::string temp = "";
+	std::vector<std::string> abilityData = std::vector<std::string>();
+	for (int i = 0; i < data.size(); i++)
+	{
+		// new ability
+		if (data[i] == ';')
+		{
+			if (abilityData != std::vector<std::string>())
+			{
+				// Create the ability
+				std::string name = abilityData[0];
+				int power = std::stoi(abilityData[1]);
+				Type type;
+				if (abilityData[2] == "Normal")
+					type = Type::Normal;
+				else if (abilityData[2] == "Fire")
+					type = Type::Fire;
+				else if (abilityData[2] == "Water")
+					type = Type::Water;
+				else if (abilityData[2] == "Grass")
+					type = Type::Grass;
+				
+				this->abilityList.push_back(new Ability(name, power, type));
+				abilityData = std::vector<std::string>();
+			}
+		}
+		// new stat
+		else if (data[i] == ',')
+		{
+			if (temp != "")
+			{
+				abilityData.push_back(temp);
+				temp = "";
+			}
+		}
+		else
+			temp += data[i];
+	}
+}
+
+Pokemon* Game::createRandomPokemon()
+{
+	// create random pokemon with a lvl similar to the player's lvl:
+	int random = rand() % this->pokemonList.size();
+	// Get the texture
+	sf::Texture texture;
+	texture.loadFromFile(POKEMON_TEXTURE_PATH + this->pokemonList[random][1] + ".png");
+	// Get the type
+	Type type;
+	if (this->pokemonList[random][2] == "Normal")
+		type = Type::Normal;
+	else if (this->pokemonList[random][2] == "Fire")
+		type = Type::Fire;
+	else if (this->pokemonList[random][2] == "Water")
+		type = Type::Water;
+	else if (this->pokemonList[random][2] == "Grass")
+		type = Type::Grass;
+	// Create a lvl based on the team highest level pokemon
+	int lvl = this->player.getHighestLvlPokemon()->getLevel() + rand() % 5 - 2;
+	// Get the base stats
+	std::string name = this->pokemonList[random][0];
+	int hp = std::stoi(this->pokemonList[random][3]);
+	hp = hp * lvl / 50 + lvl + 10 + rand() % 16;
+	
+	int atk = std::stoi(this->pokemonList[random][4]);
+	atk = atk * lvl / 50 + 5 + rand() % 16;
+	int def = std::stoi(this->pokemonList[random][5]);
+	def = def * lvl / 50 + 5 + rand() % 16;
+	int spd = std::stoi(this->pokemonList[random][6]);
+	spd = spd * lvl / 50 + 5 + rand() % 16;
+
+	// Get 4 random abilities
+	std::vector<Ability*> abilities = std::vector<Ability*>();
+	random = rand() % 4;
+	random = std::min(random + (int)(lvl / 20), 4);
+	for (int i = 0; i < random; i++)
+		abilities.push_back(this->abilityList[rand() % this->abilityList.size()]);
+	
+	return new Pokemon(texture, name, lvl, hp, atk, def, spd, abilities, type);
 }
 
 void Game::moveViewToPlayer()
@@ -335,7 +507,7 @@ void Game::drawMapLayer(int layer)
 	sf::Sprite sprite;
 	sprite.setTexture(this->globalTexture);
 
-	// see moveViewToPlayer() to get more info about those formulas
+	// see moveViewToPlayer() to understand the following lines
 	int camX = (int)(std::min(std::max(this->player.getPositionOnMap().x * TILE_SIZE, this->gameView.getSize().x / 2), this->spawnMap[0][0].size() * TILE_SIZE - this->gameView.getSize().x / 2) / TILE_SIZE);
 	int camY = (int)(std::min(std::max(this->player.getPositionOnMap().y * TILE_SIZE, this->gameView.getSize().y / 2), this->spawnMap[0].size() * TILE_SIZE - this->gameView.getSize().y / 2) / TILE_SIZE);
 
@@ -362,10 +534,6 @@ void Game::drawMapLayer(int layer)
 			}
 		}
 	}
-}
-
-void Game::drawInBattle()
-{
 }
 
 void Game::clear()
