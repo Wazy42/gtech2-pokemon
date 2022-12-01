@@ -221,7 +221,7 @@ void Game::loadMap()
 	std::string line;
 	std::fstream file;
 	//Open the file in read mode
-	file.open("data/spawn.map", std::ios::in);
+	file.open("data/map/spawn.map", std::ios::in);
 	if (file.is_open())
 	{
 		while (getline(file, line))
