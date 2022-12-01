@@ -3,7 +3,7 @@
 #include <fstream>
 
 Game::Game(Player& player) : 
-	gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled", sf::Style::Close),
+	gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled"),
 	gameState(GameState::MainMenu), 
 	player(player)
 {
@@ -282,9 +282,24 @@ Pokemon* Game::getRandomPokemon()
 
 void Game::moveViewToPlayer()
 {
-	// Move the view to the player
-	this->gameView.setCenter(this->player.getPositionOnMap().x * TILE_SIZE + TILE_SIZE / 2, this->player.getPositionOnMap().y * TILE_SIZE + TILE_SIZE / 2);
-	gameWindow.setView(gameView);
+	// Set the camera on top of the player except when it allows us to see the outside of the map
+    this->gameView.setCenter(
+        // Camera X:
+        std::min(
+            std::max(
+                this->player.getPositionOnMap().x * TILE_SIZE,
+                this->gameView.getSize().x / 2
+            ), this->spawnMap[0][0].size() * TILE_SIZE - (this->gameView.getSize().x + TILE_SIZE) / 2
+        ) + TILE_SIZE / 2,
+        // Camera Y
+        std::min(
+            std::max(
+                this->player.getPositionOnMap().y * TILE_SIZE,
+                this->gameView.getSize().y / 2
+            ), this->spawnMap[0].size() * TILE_SIZE - (this->gameView.getSize().y + TILE_SIZE) / 2
+        ) + TILE_SIZE / 2
+    );
+    gameWindow.setView(gameView);
 }
 
 void Game::resetView()
@@ -319,15 +334,17 @@ void Game::drawMapLayer(int layer)
 {
 	sf::Sprite sprite;
 	sprite.setTexture(this->globalTexture);
-	int playerX = (int)(this->player.getPositionOnMap().x);
-	int playerY = (int)(this->player.getPositionOnMap().y);
 
-	int top = std::max(0, playerY - WINDOW_HEIGHT / TILE_SIZE / 2);
-	int bot = std::min((int)this->spawnMap[layer].size(), playerY + WINDOW_HEIGHT / TILE_SIZE / 2 + 2);
+	// see moveViewToPlayer() to get more info about those formulas
+	int camX = (int)(std::min(std::max(this->player.getPositionOnMap().x * TILE_SIZE, this->gameView.getSize().x / 2), this->spawnMap[0][0].size() * TILE_SIZE - this->gameView.getSize().x / 2) / TILE_SIZE);
+	int camY = (int)(std::min(std::max(this->player.getPositionOnMap().y * TILE_SIZE, this->gameView.getSize().y / 2), this->spawnMap[0].size() * TILE_SIZE - this->gameView.getSize().y / 2) / TILE_SIZE);
+
+	int top = std::max(0, camY - (int)this->gameView.getSize().y / TILE_SIZE / 2);
+	int bot = std::min((int)this->spawnMap[layer].size(), camY + (int)this->gameView.getSize().y / TILE_SIZE / 2 + 2);
 	for (int y = top; y < bot; y++)
 	{
-		int left = std::max(0, playerX - WINDOW_WIDTH / TILE_SIZE / 2);
-		int right = std::min((int)this->spawnMap[layer][y].size(), playerX + WINDOW_WIDTH / TILE_SIZE / 2 + 2);
+		int left = std::max(0, camX - (int)this->gameView.getSize().x / TILE_SIZE / 2);
+		int right = std::min((int)this->spawnMap[layer][y].size(), camX + (int)this->gameView.getSize().x / TILE_SIZE / 2 + 2);
 		for (int x = left; x < right; x++)
 		{
 			int id = this->spawnMap[layer][y][x] - 1;
