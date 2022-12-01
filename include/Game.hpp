@@ -71,7 +71,6 @@ private:
 	
 	// Map
 	sf::Texture globalTexture;
-	sf::Texture natureTexture;
 	std::vector<std::vector<std::vector<int>>> spawnMap;
 
 	// Menus
@@ -80,6 +79,8 @@ private:
 
 	// Battle
 	Battle* battle;
+	Entity* healthBar;
+	Entity* buttons;
 	std::vector<std::vector<std::string>> pokemonList; // Array of [name, image_name, type, hp, atk, def, spd]
 	std::vector<Ability*> abilityList;
 };

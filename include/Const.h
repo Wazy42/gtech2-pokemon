@@ -33,12 +33,28 @@
 #define LAYER_GROUD 0 // Rendered below the player
 
 // Battle
-#define BATTLE_TEXTURE_PATH "assets/gui/battle_screen.png"
 #define SPAWN_CHANCE 10
-#define ABILITY_ONE_BUTON_RECT sf::IntRect(0, 0, 0, 0)
-#define ABILITY_TWO_BUTON_RECT sf::IntRect(0, 0, 0, 0)
-#define ABILITY_THREE_BUTON_RECT sf::IntRect(0, 0, 0, 0)
-#define ABILITY_FOUR_BUTON_RECT sf::IntRect(0, 0, 0, 0)
+#define BATTLE_TEXTURE_PATH "assets/gui/battle_screen.png"
+#define BUTTONS_TEXTURE_PATH "assets/gui/buttons.png"
+#define BUTTONS_BLUE_RECT sf::IntRect(0, 0, 130, 46)
+#define BUTTONS_RED_RECT sf::IntRect(0, 46, 130, 46)
+#define BUTTONS_GREEN_RECT sf::IntRect(0, 92, 130, 46)
+#define BUTTONS_YELLOW_RECT sf::IntRect(0, 138, 130, 46)
+#define BUTTONS_SCALE 2
+#define BUTTON_ABILITY_1_RECT sf::IntRect(1920 - 405 * BUTTONS_SCALE - 3, 1080 - 92 * BUTTONS_SCALE - 6, 130, 46)
+#define BUTTON_ABILITY_2_RECT sf::IntRect(1920 - 270 * BUTTONS_SCALE - 3, 1080 - 92 * BUTTONS_SCALE - 6, 130, 46)
+#define BUTTON_ABILITY_3_RECT sf::IntRect(1920 - 405 * BUTTONS_SCALE - 3, 1080 - 46 * BUTTONS_SCALE - 3, 130, 46)
+#define BUTTON_ABILITY_4_RECT sf::IntRect(1920 - 270 * BUTTONS_SCALE - 3, 1080 - 46 * BUTTONS_SCALE - 3, 130, 46)
+#define BUTTON_POKEMON_RECT sf::IntRect(1920 - 135 * BUTTONS_SCALE - 3, 1080 - 92 * BUTTONS_SCALE - 6, 130, 46)
+#define BUTTON_FLEE_RECT sf::IntRect(1920 - 135 * BUTTONS_SCALE - 3, 1080 - 46 * BUTTONS_SCALE - 3, 130, 46)
+#define HEALTHBAR_TEXTURE_PATH "assets/gui/healthbar.png"
+#define HEALTHBAR_WIDTH 800
+#define HEALTHBAR_HEIGHT 113
+#define HEALTHBAR_ALLY_POSTION sf::Vector2f(3, 964)
+#define HEALTHBAR_ENEMY_POSTION sf::Vector2f(1117, 3)
+#define ALLY_POKEMON_POSITION sf::Vector2f(215, 400)
+#define ENEMY_POKEMON_POSITION sf::Vector2f(1250, 190)
+
 
 // Player
 #define PLAYER_SIZE 64

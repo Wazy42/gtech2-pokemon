@@ -3,12 +3,20 @@
 #include <fstream>
 
 Game::Game(Player& player) : 
-	gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled"),
+	gameWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Pokemon Dazzled", sf::Style::Fullscreen),
 	gameState(GameState::MainMenu), 
 	player(player)
 {
 	gameView = gameWindow.getView();
 	gameWindow.setFramerateLimit(FPS_LIMIT);
+
+	// Load Textures
+	sf::Texture temp;
+	temp.loadFromFile(BUTTONS_TEXTURE_PATH);
+	this->buttons = new Entity(temp);
+	this->buttons->getSprite().setScale(BUTTONS_SCALE, BUTTONS_SCALE);
+	temp.loadFromFile(HEALTHBAR_TEXTURE_PATH);
+	this->healthBar = new Entity(temp);
 }
 
 /// Menus
@@ -54,7 +62,7 @@ void Game::switchToPauseMenu()
 
 void Game::switchToInGame()
 {
-	this->resetView();
+	this->moveViewToPlayer();
 	this->gameState = GameState::InGame;
 }
 
@@ -144,6 +152,9 @@ void Game::handleEvents()
 					this->gameWindow.close();
 				}
 			}
+			else if (this->gameState == InBattle)
+			{
+			}
 		}
 	}
 }
@@ -191,7 +202,7 @@ void Game::manageAndDrawPlayer(int frame)
 	}
 
 	// Animate the walk
-	if (player.isMoving())
+	if (player.isMoving() && this->gameState != InBattle)
 	{
 		if (frame % 4 == 0)
 			this->player.gotoNextFrame();
@@ -211,6 +222,8 @@ void Game::manageAndDrawPlayer(int frame)
 			this->player.moveOnMap((float)(0.1 * PLAYER_WALK_SPEED), 0);
 			break;
 		}
+		
+		this->moveViewToPlayer();
 	}
 
 	// Draw player
@@ -219,7 +232,50 @@ void Game::manageAndDrawPlayer(int frame)
 
 void Game::manageAndDrawBattle(int frame)
 {
+	// Manage battle
+	Pokemon* ally = this->battle->getAlly();
+	Pokemon* enemy = this->battle->getEnemy();
+	
+	// Draw battle:
+	// Draw background
 	this->gameWindow.draw(sf::Sprite(this->backgroundTexture));
+	// Draw pokemons
+	this->drawEntity(*ally);
+	this->drawEntity(*enemy);
+	// Draw health bars background
+	this->healthBar->getSprite().setColor(sf::Color::Red);
+	this->healthBar->setSpritePosition(HEALTHBAR_ALLY_POSTION);
+	this->drawEntity(*this->healthBar);
+	this->healthBar->setSpritePosition(HEALTHBAR_ENEMY_POSTION);
+	this->drawEntity(*this->healthBar);
+	// Draw health bars in function of pokemons health
+	this->healthBar->getSprite().setColor(sf::Color::Green);
+	this->healthBar->getSprite().setTextureRect(sf::IntRect(0, 0, (int)(ally->getHp() * HEALTHBAR_WIDTH / ally->getMaxHp()), HEALTHBAR_HEIGHT));
+	this->healthBar->setSpritePosition(HEALTHBAR_ALLY_POSTION);
+	this->drawEntity(*this->healthBar);
+	this->healthBar->getSprite().setTextureRect(sf::IntRect(0, 0, (int)(enemy->getHp() * HEALTHBAR_WIDTH / enemy->getMaxHp()), HEALTHBAR_HEIGHT));
+	this->healthBar->setSpritePosition(HEALTHBAR_ENEMY_POSTION);
+	this->drawEntity(*this->healthBar);
+	// Draw buttons
+	this->buttons->getSprite().setTextureRect(BUTTONS_RED_RECT);
+	this->buttons->setSpritePosition(BUTTON_ABILITY_1_RECT.left, BUTTON_ABILITY_1_RECT.top);
+	this->drawEntity(*this->buttons);
+	this->buttons->getSprite().setTextureRect(BUTTONS_RED_RECT);
+	this->buttons->setSpritePosition(BUTTON_ABILITY_2_RECT.left, BUTTON_ABILITY_2_RECT.top);
+	this->drawEntity(*this->buttons);
+	this->buttons->getSprite().setTextureRect(BUTTONS_RED_RECT);
+	this->buttons->setSpritePosition(BUTTON_ABILITY_3_RECT.left, BUTTON_ABILITY_3_RECT.top);
+	this->drawEntity(*this->buttons);
+	this->buttons->getSprite().setTextureRect(BUTTONS_RED_RECT);
+	this->buttons->setSpritePosition(BUTTON_ABILITY_4_RECT.left, BUTTON_ABILITY_4_RECT.top);
+	this->drawEntity(*this->buttons);
+	this->buttons->getSprite().setTextureRect(BUTTONS_GREEN_RECT);
+	this->buttons->setSpritePosition(BUTTON_POKEMON_RECT.left, BUTTON_POKEMON_RECT.top);
+	this->drawEntity(*this->buttons);
+	this->buttons->getSprite().setTextureRect(BUTTONS_BLUE_RECT);
+	this->buttons->setSpritePosition(BUTTON_FLEE_RECT.left, BUTTON_FLEE_RECT.top);
+	this->drawEntity(*this->buttons);
+	// Draw texts
 	for (int i = 0; i < this->textsToDraw.size(); i++)
 	{
 		this->drawText(this->textsToDraw[i]);
@@ -347,7 +403,10 @@ void Game::loadPokemons() {
 	Type type = Type::Normal;
 	std::vector<Ability*> abilities = std::vector<Ability*>();
 	abilities.push_back(this->abilityList[2]);
-	this->player.addPokemon(new Pokemon(texture, name, lvl, hp, atk, def, spd, abilities, type));
+	Pokemon* Eevee = new Pokemon(texture, name, lvl, hp, atk, def, spd, abilities, type);
+	Eevee->setTexture(texture);
+	Eevee->setSpritePosition(ALLY_POKEMON_POSITION);
+	this->player.addPokemon(Eevee);
 }
 
 void Game::loadAbilities()
@@ -449,7 +508,10 @@ Pokemon* Game::createRandomPokemon()
 	for (int i = 0; i < random; i++)
 		abilities.push_back(this->abilityList[rand() % this->abilityList.size()]);
 	
-	return new Pokemon(texture, name, lvl, hp, atk, def, spd, abilities, type);
+	Pokemon* enemy = new Pokemon(texture, name, lvl, hp, atk, def, spd, abilities, type);
+	enemy->setTexture(texture);
+	enemy->setSpritePosition(ENEMY_POKEMON_POSITION);
+	return enemy;
 }
 
 void Game::moveViewToPlayer()

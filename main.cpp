@@ -18,11 +18,11 @@ int main()
 	louis.setPositionOnMap(sf::Vector2f(40, 53));
 	
 	Game g(louis);
-	g.switchToMainMenu();
 	g.loadMap();
 	g.loadAbilities();
 	g.loadPokemons();
 
+	g.switchToInBattle();
 	int frame = 0;
 	while (g.isRunning())
 	{
@@ -42,7 +42,6 @@ int main()
 			g.manageAndDrawPlayer(frame);
 			g.drawMapLayer(LAYER_DECORATIONS);
 			g.drawMapLayer(LAYER_OBSTACLES);
-			g.moveViewToPlayer();
 			break;
 		case GameState::InBattle:
 			g.manageAndDrawBattle(frame);
