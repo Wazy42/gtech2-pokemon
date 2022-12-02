@@ -126,6 +126,7 @@ void Game::handleEvents()
 			{
 				if (PLAY_BUTTON_RECT.contains(mousePosition))
 				{
+					this->loadMap();
 					this->switchToInGame();
 				}
 				else if (SETTINGS_BUTTON_RECT.contains(mousePosition))
@@ -145,10 +146,12 @@ void Game::handleEvents()
 				}
 				else if (MAIN_MENU_BUTTON_RECT.contains(mousePosition))
 				{
+					this->saveGame(std::string{ SAVE_FILE_PATH });
 					this->switchToMainMenu();
 				}
 				else if (SAVE_AND_QUIT_BUTTON_RECT.contains(mousePosition))
 				{
+					this->saveGame(std::string{ SAVE_FILE_PATH });
 					this->gameWindow.close();
 				}
 			}
@@ -607,6 +610,69 @@ void Game::clear()
 void Game::display()
 {
 	this->gameWindow.display();
+}
+
+
+/// Save the game
+
+void Game::saveGame(std::string fileName, bool rewrite)
+{
+	// Open the file
+	std::ofstream file;
+	file.open(SAVE_FILE_PATH);
+
+	if (rewrite)
+	{
+		// Write the player's position
+		file << this->player.getPositionOnMap().x << " " << this->player.getPositionOnMap().y << std::endl;
+		// Write the player's team
+		file << this->player.getTeam().size() << std::endl;
+		for (int i = 0; i < this->player.getTeam().size(); i++)
+		{
+			file << this->player.getTeam()[i]->getName() << " " << this->player.getTeam()[i]->getLevel() << " " << this->player.getTeam()[i]->getHp() << " " << this->player.getTeam()[i]->getAtk() << " " << this->player.getTeam()[i]->getDef() << " " << this->player.getTeam()[i]->getSpd() << std::endl;
+			file << this->player.getTeam()[i]->getAbilities().size() << std::endl;
+			for (int j = 0; j < this->player.getTeam()[i]->getAbilities().size(); j++)
+			{
+				file << this->player.getTeam()[i]->getAbilities()[j]->getName() << std::endl;
+			}
+		}
+	}
+	else
+	{
+		// Write the player's position
+		file << this->player.getPositionOnMap().x << ", " << this->player.getPositionOnMap().y << ";" << std::endl;
+		// Write the player's team
+		file << this->player.getTeam().size() << ";" << std::endl;
+		for (int i = 0; i < this->player.getTeam().size(); i++)
+		{
+			file << this->player.getTeam()[i]->getName() << " " << this->player.getTeam()[i]->getLevel() << " " << this->player.getTeam()[i]->getHp() << " " << this->player.getTeam()[i]->getAtk() << " " << this->player.getTeam()[i]->getDef() << " " << this->player.getTeam()[i]->getSpd() << std::endl;
+			file << this->player.getTeam()[i]->getAbilities().size() << std::endl;
+			for (int j = 0; j < this->player.getTeam()[i]->getAbilities().size(); j++)
+			{
+				file << this->player.getTeam()[i]->getAbilities()[j]->getName() << ";" << std::endl;
+			}
+		}
+	}
+	
+	file.close();
+}
+
+/// Load the game
+
+void Game::loadGame(std::string fileName)
+{
+	// Open the file
+	std::ifstream file;
+	file.open(SAVE_FILE_PATH);
+
+	if (file.is_open())
+	{
+		// Read coordinates
+		std::ifstream file;
+		int x, y;
+		file >> x >> y;
+		this->player.setPositionOnMap(sf::Vector2f(x, y));
+	}
 }
 
 /// Text

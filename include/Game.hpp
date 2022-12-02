@@ -50,6 +50,12 @@ public:
 	void clear();
 	void display();
 
+	// Save the game
+	void saveGame(std::string fileName, bool rewrite = false);
+	
+	// Load the game
+	void loadGame(std::string fileName);
+
 	// Text
 	void changeFont(std::string fontPath);
 	void changeFontSize(int size);
