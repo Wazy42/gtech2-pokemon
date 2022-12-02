@@ -25,7 +25,7 @@ int main()
 	g.loadAbilities();
 	g.loadPokemons();
 
-	g.switchToInBattle();
+	g.switchToMainMenu();
 	int frame = 0;
 	while (g.isRunning())
 	{
