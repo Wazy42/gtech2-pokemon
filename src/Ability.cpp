@@ -14,14 +14,13 @@ void Ability::resolve(Pokemon* caster, Pokemon* target)
 	// See: https://bulbapedia.bulbagarden.net/wiki/Damage
 	float finalDamages = (
 		((2.0f * caster->getLevel() / 5.0f + 2.0f) *
-		this->power * caster->getAtk() / target->getDef() / 50.0f + 2.0f) *
+		this->power * (caster->getAtk() / target->getDef()) / 50.0f + 2.0f) *
 		(caster->getType() == this->type ? 1.5f : 1.0f) *
 		getMultiplier(this->type, target->getType()) *
-		(0.85f + rand() * 0.15f)
+		(0.85f + (rand() % 15) / 100)
 	);
 
 	// TODO: Add animations and damage dealt on screen
-	
 	(*target).remHp((int)finalDamages);
 }
 
@@ -33,15 +32,9 @@ std::vector<Ability*> Pokemon::getAbilities()
 	return this->abilities;
 }
 
-// Pokemon: Replace a known ability by a new one
-void Pokemon::learn(Ability* a, int position)
-{
-	std::cout << this->name << " learned " << (*a).getName() << "." << std::endl;
-}
-
 // Pokemon: Use an ability
-void Pokemon::use(int aNum, std::vector<Pokemon> targets)
+void Pokemon::use(int aNum, Pokemon* target)
 {
 	Ability* a = this->abilities[aNum];
-	std::cout << this->name << " used " << (*a).getName() << "." << std::endl;
+	a->resolve(this, target);
 }

@@ -50,10 +50,8 @@ public:
 	void clear();
 	void display();
 
-	// Save the game
+	// Save
 	void saveGame(std::string fileName, bool rewrite = false);
-	
-	// Load the game
 	void loadGame(std::string fileName);
 
 	// Text

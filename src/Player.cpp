@@ -7,6 +7,7 @@ Player::Player(const sf::Texture& texture) : AnimatedEntity(texture, PLAYER_ANIM
 	this->moving = false;
 	this->setSpritePosition(0, 0);
 	this->sprite.setScale(PLAYER_SCALE, PLAYER_SCALE);
+	this->team = std::vector<Pokemon*>();
 }
 
 // Move the player on the map by x and y (movement)

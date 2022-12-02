@@ -8,6 +8,9 @@
 
 int main()
 {
+	// init random
+	srand(time(NULL));
+
     sf::Texture texture;
     if (!texture.loadFromFile(PLAYER_TEXTURE_PATH))
     {

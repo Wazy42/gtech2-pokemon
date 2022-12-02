@@ -72,11 +72,24 @@ void Game::switchToInBattle()
 	this->backgroundTexture.loadFromFile(BATTLE_TEXTURE_PATH);
 	this->resetView();
 
+	// Ally pokemon
+	Pokemon* ally = this->player.getTeam()[0];
+
+	// Create the text
 	this->textsToDraw.clear();
+	this->changeFont(FONT_SPINWERAD_C_PATH);
+	this->changeFontColor(sf::Color::White);
+	this->changeFontSize(FONT_SIZE_BATTLE);
+	for (int i = 0; i < ally->getAbilities().size(); i++)
+	{
+		this->textsToDraw.push_back(this->createText(ally->getAbilities()[i]->getName(), ABILITY_BUTTON_RECTS[i]));
+	}
+	this->textsToDraw.push_back(this->createText("POKEMON", BUTTON_POKEMON_RECT));
+	this->textsToDraw.push_back(this->createText("FLEE", BUTTON_FLEE_RECT));
 	
 	// Create the battle
 	this->battle = new Battle(
-		this->player.getTeam()[0],
+		ally,
 		this->createRandomPokemon()
 	);
 	this->gameState = GameState::InBattle;
@@ -157,6 +170,24 @@ void Game::handleEvents()
 			}
 			else if (this->gameState == InBattle)
 			{
+				Pokemon* ally = this->battle->getAlly();
+				Pokemon* enemy = this->battle->getEnemy();
+				
+				if (BUTTON_FLEE_RECT.contains(mousePosition))
+				{
+					this->switchToInGame();
+				}
+				else
+				{
+					for (int i = 0; i < ally->getAbilities().size(); i++)
+					{
+						if (ABILITY_BUTTON_RECTS[i].contains(mousePosition))
+						{
+							ally->use(i, enemy);
+							break;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -170,7 +201,7 @@ void Game::manageAndDrawPlayer(int frame)
 		this->player.stopMoving();
 		
 		// If player is on a spawn tile, he may encounter a wild pokemon
-		if (this->spawnMap[LAYER_SPAWN][this->player.getPositionOnMap().y][this->player.getPositionOnMap().x] != 0)
+		if (this->spawnMap[LAYER_SPAWN][(int)this->player.getPositionOnMap().y][(int)this->player.getPositionOnMap().x] != 0)
 		{
 			int random = rand() % 100;
 			if (random < SPAWN_CHANCE) {
@@ -239,6 +270,16 @@ void Game::manageAndDrawBattle(int frame)
 	Pokemon* ally = this->battle->getAlly();
 	Pokemon* enemy = this->battle->getEnemy();
 	
+	if (ally->getHp() <= 0)
+	{
+		// quit game
+		this->gameWindow.close();
+	}
+	else if (enemy->getHp() <= 0)
+	{
+		this->switchToInGame();
+	}
+	
 	// Draw battle:
 	// Draw background
 	this->gameWindow.draw(sf::Sprite(this->backgroundTexture));
@@ -247,6 +288,7 @@ void Game::manageAndDrawBattle(int frame)
 	this->drawEntity(*enemy);
 	// Draw health bars background
 	this->healthBar->getSprite().setColor(sf::Color::Red);
+	this->healthBar->getSprite().setTextureRect(sf::IntRect(0, 0, HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT));
 	this->healthBar->setSpritePosition(HEALTHBAR_ALLY_POSTION);
 	this->drawEntity(*this->healthBar);
 	this->healthBar->setSpritePosition(HEALTHBAR_ENEMY_POSTION);
@@ -261,22 +303,22 @@ void Game::manageAndDrawBattle(int frame)
 	this->drawEntity(*this->healthBar);
 	// Draw buttons
 	this->buttons->getSprite().setTextureRect(BUTTONS_RED_RECT);
-	this->buttons->setSpritePosition(BUTTON_ABILITY_1_RECT.left, BUTTON_ABILITY_1_RECT.top);
+	this->buttons->setSpritePosition((float)ABILITY_BUTTON_RECTS[0].left, (float)ABILITY_BUTTON_RECTS[0].top);
 	this->drawEntity(*this->buttons);
 	this->buttons->getSprite().setTextureRect(BUTTONS_RED_RECT);
-	this->buttons->setSpritePosition(BUTTON_ABILITY_2_RECT.left, BUTTON_ABILITY_2_RECT.top);
+	this->buttons->setSpritePosition((float)ABILITY_BUTTON_RECTS[1].left, (float)ABILITY_BUTTON_RECTS[1].top);
 	this->drawEntity(*this->buttons);
 	this->buttons->getSprite().setTextureRect(BUTTONS_RED_RECT);
-	this->buttons->setSpritePosition(BUTTON_ABILITY_3_RECT.left, BUTTON_ABILITY_3_RECT.top);
+	this->buttons->setSpritePosition((float)ABILITY_BUTTON_RECTS[2].left, (float)ABILITY_BUTTON_RECTS[2].top);
 	this->drawEntity(*this->buttons);
 	this->buttons->getSprite().setTextureRect(BUTTONS_RED_RECT);
-	this->buttons->setSpritePosition(BUTTON_ABILITY_4_RECT.left, BUTTON_ABILITY_4_RECT.top);
+	this->buttons->setSpritePosition((float)ABILITY_BUTTON_RECTS[3].left, (float)ABILITY_BUTTON_RECTS[3].top);
 	this->drawEntity(*this->buttons);
 	this->buttons->getSprite().setTextureRect(BUTTONS_GREEN_RECT);
-	this->buttons->setSpritePosition(BUTTON_POKEMON_RECT.left, BUTTON_POKEMON_RECT.top);
+	this->buttons->setSpritePosition((float)BUTTON_POKEMON_RECT.left, (float)BUTTON_POKEMON_RECT.top);
 	this->drawEntity(*this->buttons);
 	this->buttons->getSprite().setTextureRect(BUTTONS_BLUE_RECT);
-	this->buttons->setSpritePosition(BUTTON_FLEE_RECT.left, BUTTON_FLEE_RECT.top);
+	this->buttons->setSpritePosition((float)BUTTON_FLEE_RECT.left, (float)BUTTON_FLEE_RECT.top);
 	this->drawEntity(*this->buttons);
 	// Draw texts
 	for (int i = 0; i < this->textsToDraw.size(); i++)
@@ -400,9 +442,13 @@ void Game::loadPokemons() {
 	std::string name = "Eevee";
 	int lvl = 1;
 	int hp = 55;
+	hp = hp * lvl / 50 + lvl + 10 + rand() % 16;
 	int atk = 55;
+	atk = atk * lvl / 50 + 5 + rand() % 16;
 	int def = 50;
+	def = def * lvl / 50 + 5 + rand() % 16;
 	int spd = 55;
+	spd = spd * lvl / 50 + 5 + rand() % 16;
 	Type type = Type::Normal;
 	std::vector<Ability*> abilities = std::vector<Ability*>();
 	abilities.push_back(this->abilityList[2]);
@@ -475,6 +521,7 @@ void Game::loadAbilities()
 
 Pokemon* Game::createRandomPokemon()
 {
+	srand(rand() ^ time(NULL));
 	// create random pokemon with a lvl similar to the player's lvl:
 	int random = rand() % this->pokemonList.size();
 	// Get the texture
@@ -491,17 +538,24 @@ Pokemon* Game::createRandomPokemon()
 	else if (this->pokemonList[random][2] == "Grass")
 		type = Type::Grass;
 	// Create a lvl based on the team highest level pokemon
+	srand(rand() ^ time(NULL));
 	int lvl = this->player.getHighestLvlPokemon()->getLevel() + rand() % 5 - 2;
+	lvl = std::max(lvl, 1);
+
 	// Get the base stats
 	std::string name = this->pokemonList[random][0];
 	int hp = std::stoi(this->pokemonList[random][3]);
+	srand(rand() ^ time(NULL));
 	hp = hp * lvl / 50 + lvl + 10 + rand() % 16;
 	
 	int atk = std::stoi(this->pokemonList[random][4]);
+	srand(rand() ^ time(NULL));
 	atk = atk * lvl / 50 + 5 + rand() % 16;
 	int def = std::stoi(this->pokemonList[random][5]);
+	srand(rand() ^ time(NULL));
 	def = def * lvl / 50 + 5 + rand() % 16;
 	int spd = std::stoi(this->pokemonList[random][6]);
+	srand(rand() ^ time(NULL));
 	spd = spd * lvl / 50 + 5 + rand() % 16;
 
 	// Get 4 random abilities
@@ -671,7 +725,7 @@ void Game::loadGame(std::string fileName)
 		std::ifstream file;
 		int x, y;
 		file >> x >> y;
-		this->player.setPositionOnMap(sf::Vector2f(x, y));
+		this->player.setPositionOnMap(sf::Vector2f((float)x, (float)y));
 	}
 }
 

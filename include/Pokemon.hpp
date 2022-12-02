@@ -33,8 +33,7 @@ public:
 	void revive();
 	// ABILITIES (declared in "Abiliy.cpp" file)
 	std::vector<Ability*> getAbilities();
-	void learn(Ability* a, int position);
-	void use(int aNum, std::vector<Pokemon> targets);
+	void use(int aNum, Pokemon* target);
 
 private:
 	std::string name;
